@@ -1,0 +1,28 @@
+:root {
+    --matrix-length-D: 0;
+    --matrix-length-T: 0;
+}
+
+#container1 {
+    height: 200px;
+    width: 200px;
+
+    display: grid;
+    grid-template-columns: repeat(var(--matrix-length-D), 1fr);
+    grid-template-rows: repeat(var(--matrix-length-D), 1fr);
+}
+
+#container2 {
+    height: 200px;
+    width: 200px;
+
+    display: grid;
+    grid-template-columns: repeat(var(--matrix-length-T), 1fr);
+    grid-template-rows: repeat(var(--matrix-length-T), 1fr);
+}
+
+.matrix-inputs {
+    height: 10px;
+    width: 10px;
+    background-color: blue;
+}

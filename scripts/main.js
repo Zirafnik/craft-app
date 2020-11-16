@@ -14,7 +14,8 @@ const DOM = (function() {
     //EVENT LISTENERS
     elements.start.addEventListener('click', function() {
         cleanInputContainers();
-        createMatrices(storage.Dlength, storage.Tlength);
+        createMatrix(storage.Dlength, elements.container1);
+        createMatrix(storage.Tlength, elements.container2);
     });
 
     const cleanInputContainers= () => {
@@ -25,19 +26,20 @@ const DOM = (function() {
         })
     }
 
-    const createMatrices= (Dlength, Tlength) => {
-        //create custom grid
-
-        //add input elements
-        for(let i=0; i<Dlength**2; i++) {
-            let input= document.createElement('input');
-            //add type
-            elements.container1.appendChild(input);
+    const createMatrix= (length, container) => {
+        //create custom matrix grid size
+        if(container== elements.container1) {
+            document.documentElement.style.setProperty('--matrix-length-D', length);
+        } else if(container== elements.container2) {
+            document.documentElement.style.setProperty('--matrix-length-T', length);
         }
 
-        for(let i=0; i<Tlength**2; i++) {
+        //add input elements
+        for(let i=0; i<length**2; i++) {
             let input= document.createElement('input');
-            elements.container2.appendChild(input);
+            input.classList.add('matrix-inputs');
+            input.setAttribute("type", "text");
+            container.appendChild(input);
         }
     }
 
@@ -50,7 +52,7 @@ const DOM = (function() {
 const storage= (function() {
     let Dlength= DOM.elements.DSizeInput.value;
     let Tlength= DOM.elements.LSizeInput.value;
-    
+
 
     return {
         Dlength,
