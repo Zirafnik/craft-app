@@ -3,12 +3,11 @@ const DOM = (function() {
         start: document.querySelector('#start'),
 
         inputContainers: document.querySelectorAll('.inputContainer'),
+        container1: document.querySelector('#container1'),
+        container2: document.querySelector('#container2'),
 
         DSizeInput: document.querySelector('#Dmatrix-size'),
         LSizeInput: document.querySelector('#Tmatrix-size'),
-
-        container1: document.querySelector('#container1'),
-        container2: document.querySelector('#container2')
     }
 
     //EVENT LISTENERS
@@ -53,9 +52,38 @@ const storage= (function() {
     let Dlength= DOM.elements.DSizeInput.value;
     let Tlength= DOM.elements.LSizeInput.value;
 
+    let matrixD=[];
+    let matrixT=[];
+
+    const saveMatrix= (container) => {
+        let matrix=[];
+        if(container == DOM.elements.container1) {
+            let arr= Array.from(container.children);
+            arr.forEach(input => {
+                matrix.push(input.value);
+            });
+            //turn array of numbers into array of arrays --> each array is 1 row, and each element in array is the column index
+            while(matrix.length) {
+                matrixD.push(matrix.splice(0, Dlength));
+            }
+
+        } else if(container== DOM.elements.container2) {
+            let arr= Array.from(container.children);
+            arr.forEach(input => {
+                matrix.push(input.value);
+            });
+            //turn array of numbers into array of arrays --> each array is 1 row, and each element in array is the column index
+            while(matrix.length) {
+                matrixT.push(matrix.splice(0, Tlength));
+            }
+        }
+    }
 
     return {
         Dlength,
-        Tlength
+        Tlength,
+        saveMatrix,
+        matrixD,
+        matrixT
     }
 })();
