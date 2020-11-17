@@ -23,6 +23,8 @@ const DOM = (function() {
             createMatrix(storage.getTlength(), elements.container2);
             //removes start button
             elements.div1.removeChild(elements.start);
+            //creates enter
+            createEnterButton();
         }
     });
 
@@ -49,6 +51,20 @@ const DOM = (function() {
             input.setAttribute("type", "text");
             container.appendChild(input);
         }
+    }
+
+    //ENTER
+    const createEnterButton= () => {
+        let btn= document.createElement('button');
+        btn.textContent= 'ENTER';
+        btn.setAttribute('type', 'button');
+
+        btn.addEventListener('click', function() {
+            storage.saveMatrix(elements.container1);
+            storage.saveMatrix(elements.container2);
+        })
+
+        elements.div1.appendChild(btn);
     }
 
 
