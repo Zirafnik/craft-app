@@ -16,11 +16,14 @@ const DOM = (function() {
     //EVENT LISTENERS
     //START
     elements.start.addEventListener('click', function() {
-        cleanInputContainers();
-        createMatrix(storage.getDlength(), elements.container1);
-        createMatrix(storage.getTlength(), elements.container2);
-        //removes start button
-        elements.div1.removeChild(elements.start);
+        //check if matrix length values == whole numbers
+        if(storage.getDlength()%1==0 && storage.getTlength()%1==0) {
+            cleanInputContainers();
+            createMatrix(storage.getDlength(), elements.container1);
+            createMatrix(storage.getTlength(), elements.container2);
+            //removes start button
+            elements.div1.removeChild(elements.start);
+        }
     });
 
     const cleanInputContainers= () => {
