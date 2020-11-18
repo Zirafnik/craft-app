@@ -192,15 +192,55 @@ const storage= (function() {
     }
 */
 
+    let matrixDdemo= [
+        [0, 6, 8, 2],
+        [6, 0, 4, 10],
+        [8, 4, 0, 2],
+        [2, 10, 2, 0]
+    ];
+
+    let matrixTdemo= [
+        [0, 80, 50, 30],
+        [20, 0, 100, 0],
+        [10, 0, 0, 40],
+        [60, 10, 50, 0]
+    ];
+
     return {
         getDlength,
         getTlength,
         saveTable,
         matrixD,
         matrixT,
+
+        matrixDdemo,
+        matrixTdemo
     }
 })();
 
 const logic = (function() {
 
+    const createMatrixCT= (length, T) => {
+        let j=0;
+        let matrixCT=[];
+        for(let i=0; i<length; i++) {
+            j=i;
+            matrixCT.push([]);
+            //add zeros to non-used fields
+            for(let h=0; h<j; h++) {
+                matrixCT[i].push(0);
+            }
+            //adds cummulative transfers per depts.
+            for(j; j<length; j++) {
+                let ct= T[i][j] + T[j][i];
+                matrixCT[i].push(ct);
+            }
+        }
+        return matrixCT;
+    }
+
+
+    return {
+        createMatrixCT,
+    }
 })();
