@@ -4,6 +4,7 @@ TO DO:
 -remove ENTER once clicked (add eventListener to it + all other functions it needs to do)--> continue logic with CALCULATE button
 -make all input field required
 -center table headings
+-finish getRemainingLayouts
 
 LEARNED:
 -learned how to make HTML table
@@ -240,7 +241,39 @@ const logic = (function() {
     }
 
 
+    let initialLayoutDemo=['W1', 'W2', 'W3', 'W4'];
+
+    let CRAFTlayouts = {
+     //layouts get stored here   
+    }
+
+    const getRemainingLayouts= (array, fixIndex, length, /*indexes*/) => {
+        //indexes to check
+        //push indexes into array, then take out those which belong to fixed, the remaining indexes are then used to swap
+        //also check if same layout exists?
+        //refactor this into multiple functions
+        let indexes= [];
+        for(let i=0; i<array.length; i++) {
+            indexes.push()
+        }
+        for(let i=0; i<length; i++) {
+            let arr= [...array];
+            let swaped= [arr[fixIndex], arr[i]] = [arr[i], arr[fixIndex]];
+
+            //saves the layout
+            CRAFTlayouts[i+1] = {};
+            for(let j=0; j<length; j++) {
+                CRAFTlayouts[i+1][arr[j]] = j;
+            }
+        }
+
+    }
+
+
     return {
         createMatrixCT,
+        getRemainingLayouts,
+        initialLayoutDemo,
+        CRAFTlayouts
     }
 })();
