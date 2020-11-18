@@ -3,7 +3,48 @@
     --matrix-length-T: 0;
 }
 
+/*removes input type=1  number increment/decrement buttons*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+h1 {
+    text-align: center;
+
+    padding: 20px;
+
+    font-size: 50px;
+    font-weight: 800;
+}
+
+#div1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 8fr 2fr;
+
+    grid-template-areas: 
+    "matrix1 matrix2"
+    "button button";
+}
+
+.inputContainer {
+    /* add same properties here from both containers below*/
+}
+
 #container1 {
+    grid-area: matrix1;
+    justify-self: center;
+    align-self: center;
+
     height: 200px;
     width: 200px;
 
@@ -13,6 +54,10 @@
 }
 
 #container2 {
+    grid-area: matrix2;
+    justify-self: center;
+    align-self: center;
+
     height: 200px;
     width: 200px;
 
@@ -25,4 +70,8 @@
     height: 25px;
     width: 25px;
     background-color: lightcyan;
+}
+
+button {
+    grid-area: button;
 }
