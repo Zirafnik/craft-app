@@ -4,11 +4,13 @@ TO DO:
 -remove ENTER once clicked (add eventListener to it + all other functions it needs to do)--> continue logic with CALCULATE button
 -make all input field required
 -center table headings
+
 -finish getRemainingLayouts
 
 LEARNED:
 -learned how to make HTML table
 -learned how to make a matrix with it, and use input fields + then collect those inputs
+-special doble iteration which goes diagonally
 
 */
 
@@ -247,15 +249,26 @@ const logic = (function() {
      //layouts get stored here   
     }
 
-    const getRemainingLayouts= (array, fixIndex, length, /*indexes*/) => {
-        //indexes to check
-        //push indexes into array, then take out those which belong to fixed, the remaining indexes are then used to swap
+    const saveFixedDept= () => {
+
+    }
+
+    const getRemainingIndexes= (bestLayoutArr, fixedDeptsArr) => {
+        let alreadyFixedIndexes= [];
+        fixedDeptsArr.forEach(dept => alreadyFixedIndexes.push(bestLayoutArr.indexOf(dept)));
+        
+        let indexes= [0, 1, 2, 3];
+        alreadyFixedIndexes.forEach(fixed => indexes.splice(fixed, 1));
+
+        return indexes;
+    }
+
+    const getRemainingLayouts= (array, fixIndex, length) => {
+        let remainingLocations= getRemainingIndexes(); //arguments to pass in??
+
         //also check if same layout exists?
         //refactor this into multiple functions
-        let indexes= [];
-        for(let i=0; i<array.length; i++) {
-            indexes.push()
-        }
+
         for(let i=0; i<length; i++) {
             let arr= [...array];
             let swaped= [arr[fixIndex], arr[i]] = [arr[i], arr[fixIndex]];
@@ -274,6 +287,7 @@ const logic = (function() {
         createMatrixCT,
         getRemainingLayouts,
         initialLayoutDemo,
-        CRAFTlayouts
+        CRAFTlayouts,
+        getRemainingIndexes
     }
 })();
