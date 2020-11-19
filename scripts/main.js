@@ -263,11 +263,14 @@ const logic = (function() {
         return indexes;
     }
 
-    const getRemainingLayouts= (array, fixIndex, length) => {
-        let remainingLocations= getRemainingIndexes(); //arguments to pass in??
+    const getRemainingLayouts= (array, fixDept, fixIndex, length) => {
+       // let remainingLocations= getRemainingIndexes(); //arguments to pass in??
+        //use fixDept to also get fixIndex
 
         //also check if same layout exists?
         //refactor this into multiple functions
+
+        //CRAFTlayouts[fixDept]= {};
 
         for(let i=0; i<length; i++) {
             let arr= [...array];
@@ -282,12 +285,25 @@ const logic = (function() {
 
     }
 
+    //remove DEMOS!!!!
+    const calculateLayoutCost= (layoutObject, length) => {
+        let sumCost= 0;
+
+        for(let i=0; i<length; i++) {
+            for(let j=0; j<length; j++) {
+                sumCost=sumCost + storage.matrixTdemo[i][j] * storage.matrixDdemo[layoutObject[`W${i+1}`]][layoutObject[`W${j+1}`]];
+            }
+        }
+        return sumCost;
+    }
+
 
     return {
         createMatrixCT,
         getRemainingLayouts,
         initialLayoutDemo,
         CRAFTlayouts,
-        getRemainingIndexes
+        getRemainingIndexes,
+        calculateLayoutCost
     }
 })();
