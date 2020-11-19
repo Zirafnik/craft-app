@@ -29,10 +29,11 @@ h1 {
 #div1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 8fr 2fr;
+    grid-template-rows: 7fr 1fr 2fr;
 
     grid-template-areas: 
     "matrix1 matrix2"
+    "question question"
     "button button";
 }
 

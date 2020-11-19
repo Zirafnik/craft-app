@@ -10,7 +10,7 @@ TO DO:
 LEARNED:
 -learned how to make HTML table
 -learned how to make a matrix with it, and use input fields + then collect those inputs
--special doble iteration which goes diagonally
+-special double iteration which goes diagonally
 
 */
 
@@ -36,6 +36,7 @@ const DOM = (function() {
             cleanInputContainers();
             createMatrixTable(storage.getDlength(), elements.container1);
             createMatrixTable(storage.getTlength(), elements.container2);
+            createFixDeptInput('div1');
             //removes start button
             elements.div1.removeChild(elements.start);
             //creates enter
@@ -95,8 +96,19 @@ const DOM = (function() {
         container.appendChild(table);
     }
 
-    const getAllContainerInputElements= (container) => {
-        return container.querySelectorAll('table tr input');
+    const createFixDeptInput = (div) => {
+        let label= document.createElement('label');
+        label.setAttribute('for', 'fixDeptInput');
+        label.textContent= 'Which department to fix first: '
+
+        let fixDeptInput= document.createElement('input');
+        fixDeptInput.setAttribute('id', 'fixDeptInput');
+        fixDeptInput.setAttribute('type', 'text');
+        fixDeptInput.setAttribute('placeholder', 'W1');
+    
+        let parent= document.getElementById(div);
+        parent.appendChild(label);
+        parent.appendChild(fixDeptInput);
     }
 
 
@@ -123,22 +135,33 @@ const DOM = (function() {
     const createEnterButton= () => {
         let btn= document.createElement('button');
         btn.textContent= 'ENTER';
-        btn.setAttribute('type', 'button');
 
         btn.addEventListener('click', function() {
+            //saves both tables to multidimensional arrays
             storage.saveTable(elements.container1);
             storage.saveTable(elements.container2);
+
+            //saves the chosen department to fix ??
+
+            
+            //removes ENTER button
+            elements.div1.removeChild(btn);
         })
 
         elements.div1.appendChild(btn);
     }
 
 
+    const getAllContainerInputElements= (container) => {
+        return container.querySelectorAll('table tr input');
+    }
+
     return {
         elements,
         getAllContainerInputElements
     }
 })();
+
 
 const storage= (function() {
     
@@ -168,6 +191,9 @@ const storage= (function() {
             }
         }      
     }
+
+
+    let fix
 
 /* REPLACED-by saveTable
     const saveMatrix= (container) => {
@@ -249,9 +275,6 @@ const logic = (function() {
      //layouts get stored here   
     }
 
-    const saveFixedDept= () => {
-
-    }
 
     const getRemainingIndexes= (bestLayoutArr, fixedDeptsArr) => {
         let alreadyFixedIndexes= [];
@@ -297,6 +320,16 @@ const logic = (function() {
         return sumCost;
     }
 
+    let CRAFTlayoutCosts= {};
+    
+    const saveLayoutCost= () => {
+       // CRAFTlayoutCosts[costCounter]= calculateLayoutCost()
+    }
+
+    const getLowestCostLayout = () => {
+        //how to get lowest property value in object
+        //return property name (number in our case)
+    }
 
     return {
         createMatrixCT,
