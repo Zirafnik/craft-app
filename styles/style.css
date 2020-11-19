@@ -73,6 +73,11 @@ h1 {
     background-color: lightcyan;
 }
 
+.layoutTable {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
 button {
     grid-area: button;
 }

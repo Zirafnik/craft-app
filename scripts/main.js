@@ -111,6 +111,48 @@ const DOM = (function() {
         parent.appendChild(fixDeptInput);
     }
 
+    const createNewDiv= () => {
+        let newDiv= document.createElement('div');
+        let number= document.querySelectorAll('.count').length;
+
+        newDiv.setAttribute('id', `div${number}`);
+        newDiv.classList.add('count');
+
+        document.body.appendChild(newDiv);
+    }
+
+    const createLayoutTable= (layout) => {
+        let table= document.createElement('table');
+
+        let length= Object.keys(layout).length;
+
+        let firstRow= document.createElement('tr');
+        for(let i=0; i<length; i++) {
+            let room= document.createElement('td');
+            room.textContent= `L${i+1}`;
+            room.classList.add('layoutTable');
+            firstRow.appendChild(room);
+        }
+
+        let secondRow= document.createElement('tr');
+        for(let i=0; i<length; i++) {
+            let dept= document.createElement('td');
+            dept.textContent= Object.keys(layout)[i];
+            dept.classList.add('layoutTable');
+            secondRow.appendChild(dept);
+        }
+
+        table.appendChild(firstRow);
+        table.appendChild(secondRow);
+
+        return table;
+    }
+
+
+    //compose function which uses all above functions to create a layout div
+
+
+
 
     //ENTER
     const createEnterButton= () => {
@@ -123,10 +165,11 @@ const DOM = (function() {
             storage.saveTable(elements.container2);
 
             //saves the chosen department to fix ??
-
             
             //removes ENTER button
             elements.div1.removeChild(btn);
+
+            //creates new div = first layouts
         })
 
         elements.div1.appendChild(btn);
@@ -139,7 +182,10 @@ const DOM = (function() {
 
     return {
         elements,
-        getAllContainerInputElements
+        getAllContainerInputElements,
+
+        createNewDiv, //temporary??
+        createLayoutTable
     }
 })();
 
@@ -173,7 +219,7 @@ const storage= (function() {
         }      
     }
 
-    
+
 
     let matrixDdemo= [
         [0, 6, 8, 2],
