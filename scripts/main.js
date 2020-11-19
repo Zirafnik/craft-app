@@ -112,25 +112,6 @@ const DOM = (function() {
     }
 
 
-/* SOLVED THIS PROBLEM BY USING HTML TABLE
-    const createMatrix= (length, container) => {
-        //create custom matrix grid size
-        if(container== elements.container1) {
-            document.documentElement.style.setProperty('--matrix-length-D', length);
-        } else if(container== elements.container2) {
-            document.documentElement.style.setProperty('--matrix-length-T', length);
-        }
-
-        //add input elements
-        for(let i=0; i<length**2; i++) {
-            let input= document.createElement('input');
-            input.classList.add('matrix-inputs');
-            input.setAttribute("type", "number");
-            container.appendChild(input);
-        }
-    }
-*/
-
     //ENTER
     const createEnterButton= () => {
         let btn= document.createElement('button');
@@ -192,34 +173,7 @@ const storage= (function() {
         }      
     }
 
-
-    let fix
-
-/* REPLACED-by saveTable
-    const saveMatrix= (container) => {
-        let matrix=[];
-        if(container == DOM.elements.container1) {
-            let arr= Array.from(container.children);
-            arr.forEach(input => {
-                matrix.push(input.value);
-            });
-            //turn array of numbers into array of arrays --> each array is 1 row, and each element in array is the column index
-            while(matrix.length) {
-                matrixD.push(matrix.splice(0, getDlength()));
-            }
-
-        } else if(container== DOM.elements.container2) {
-            let arr= Array.from(container.children);
-            arr.forEach(input => {
-                matrix.push(input.value);
-            });
-            //turn array of numbers into array of arrays --> each array is 1 row, and each element in array is the column index
-            while(matrix.length) {
-                matrixT.push(matrix.splice(0, getTlength()));
-            }
-        }
-    }
-*/
+    
 
     let matrixDdemo= [
         [0, 6, 8, 2],
