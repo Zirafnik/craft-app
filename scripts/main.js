@@ -1,11 +1,10 @@
 /*
 TO DO:
--separate eventListeners for ENter button??
-- ENTER once clicked (+ all other functions it needs to do)--> continue logic with CALCULATE button
--make all input field required
+-make all input fieldS required
 -center table headings + td
 
--finish getRemainingLayouts
+-finish CALC BUTTON:
+    -finish getRemainingLayouts -->check if same layout exists + new name system with layoutCounter
 
 LEARNED:
 -learned how to make HTML table
@@ -218,8 +217,9 @@ const DOM = (function() {
         calc.textContent= "CALCULATE";
 
         calc.addEventListener('click', function() {
-
+            Logic.getRemainingLayouts(storage.currentBestLayout, 'W1');
         })
+
         parent.appendChild(calc);
     }
 
@@ -308,6 +308,7 @@ const storage= (function() {
         CRAFTlayouts,
         CRAFTlayoutCosts,
         currentBestLayout,
+        fixedDepts,
 
         matrixDdemo,
         matrixTdemo
@@ -335,7 +336,7 @@ const Logic = (function() {
         return matrixCT;
     }
 
-    const getRemainingIndexes= (bestLayoutArr, fixedDeptsArr) => {
+    const _getRemainingIndexes= (bestLayoutArr, fixedDeptsArr) => {
         let alreadyFixedIndexes= [];
         fixedDeptsArr.forEach(dept => alreadyFixedIndexes.push(bestLayoutArr.indexOf(dept)));
         
@@ -345,22 +346,23 @@ const Logic = (function() {
         return indexes;
     }
 
-    const getRemainingLayouts= (array, fixDept, fixIndex, length) => {
-       // let remainingLocations= getRemainingIndexes(); //arguments to pass in??
-        //use fixDept to also get fixIndex
+    const getRemainingLayouts= (bestLayoutArr, fixDept) => {
+        //remaining locations
+        let remLoc= _getRemainingIndexes(storage.currentBestLayout, storage.fixedDepts);
+       
+        let fixIndex= bestLayoutArr.indexOf(fixDept);
+
+        let numCombos= remLoc.length;
 
         //also check if same layout exists?
-        //refactor this into multiple functions
 
-        //CRAFTlayouts[fixDept]= {};
-
-        for(let i=0; i<length; i++) { //length should equal length of remainingIndexes and loop through those
-            let arr= [...array];
-            let swaped= [arr[fixIndex], arr[i]] = [arr[i], arr[fixIndex]];
+        for(let i=0; i<numCombos; i++) { //length should equal length of remainingIndexes and loop through those
+            let arr= [...bestLayoutArr];
+            let swaped= [arr[fixIndex], arr[remLoc[i]]] = [arr[remLoc[i]], arr[fixIndex]];
 
             //saves the layout
             storage.CRAFTlayouts[i+1] = {};
-            for(let j=0; j<length; j++) {
+            for(let j=0; j<bestLayoutArr.length; j++) {
                 storage.CRAFTlayouts[i+1][arr[j]] = j;
             }
         }
@@ -390,7 +392,6 @@ const Logic = (function() {
     return {
         createMatrixCT,
         getRemainingLayouts,
-        getRemainingIndexes,
         calculateLayoutCost
     }
 })();
