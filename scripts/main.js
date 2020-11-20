@@ -161,6 +161,9 @@ const DOM = (function() {
                     let heading= document.createElement('th');
                     heading.textContent= 'W' + i;
                     firstRow.appendChild(heading);
+
+                    //first layout to be used in calculations
+                    storage.currentBestLayout.push(heading.textContent);
                 }
             table.appendChild(firstRow);
 
@@ -264,6 +267,23 @@ const storage= (function() {
     }
 
 
+    let CRAFTlayouts = {
+        //layouts get stored here   
+       }
+
+    let CRAFTlayoutCosts= {
+        //craft cost stored here
+    };
+
+    const saveLayoutCost= () => {
+        // CRAFTlayoutCosts[costCounter]= calculateLayoutCost()
+    }
+    
+    //gets initial values from creation of CT table
+    let currentBestLayout=[];
+    
+    let fixedDepts= [];
+
 
     let matrixDdemo= [
         [0, 6, 8, 2],
@@ -285,6 +305,9 @@ const storage= (function() {
         saveTable,
         matrixD,
         matrixT,
+        CRAFTlayouts,
+        CRAFTlayoutCosts,
+        currentBestLayout,
 
         matrixDdemo,
         matrixTdemo
@@ -312,14 +335,6 @@ const Logic = (function() {
         return matrixCT;
     }
 
-
-    let initialLayoutDemo=['W1', 'W2', 'W3', 'W4'];
-
-    let CRAFTlayouts = {
-     //layouts get stored here   
-    }
-
-
     const getRemainingIndexes= (bestLayoutArr, fixedDeptsArr) => {
         let alreadyFixedIndexes= [];
         fixedDeptsArr.forEach(dept => alreadyFixedIndexes.push(bestLayoutArr.indexOf(dept)));
@@ -344,9 +359,9 @@ const Logic = (function() {
             let swaped= [arr[fixIndex], arr[i]] = [arr[i], arr[fixIndex]];
 
             //saves the layout
-            CRAFTlayouts[i+1] = {};
+            storage.CRAFTlayouts[i+1] = {};
             for(let j=0; j<length; j++) {
-                CRAFTlayouts[i+1][arr[j]] = j;
+                storage.CRAFTlayouts[i+1][arr[j]] = j;
             }
         }
     }
@@ -363,24 +378,18 @@ const Logic = (function() {
         return sumCost;
     }
 
-    let CRAFTlayoutCosts= {};
-    
-    const saveLayoutCost= () => {
-       // CRAFTlayoutCosts[costCounter]= calculateLayoutCost()
-    }
 
-    const getLowestCostLayout = () => {
+    const getBestLayout = () => {
         //how to get lowest property value in object
         //return property name (number in our case)
 
         //UPDATE BEST LAYOUT VALUE
+        //saved fixed dept
     }
 
     return {
         createMatrixCT,
         getRemainingLayouts,
-        initialLayoutDemo,
-        CRAFTlayouts,
         getRemainingIndexes,
         calculateLayoutCost
     }
