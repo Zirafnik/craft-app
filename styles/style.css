@@ -37,6 +37,17 @@ h1 {
     "button button";
 }
 
+#div2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 7fr 1fr 2fr;
+
+    grid-template-areas:
+    ". CT ."
+    "input input input"
+    ". calculate .";
+}
+
 .inputContainer {
     /* add same properties here from both containers below*/
 }

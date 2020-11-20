@@ -1,9 +1,9 @@
 /*
 TO DO:
 -separate eventListeners for ENter button??
--remove ENTER once clicked (add eventListener to it + all other functions it needs to do)--> continue logic with CALCULATE button
+- ENTER once clicked (+ all other functions it needs to do)--> continue logic with CALCULATE button
 -make all input field required
--center table headings
+-center table headings + td
 
 -finish getRemainingLayouts
 
@@ -33,18 +33,17 @@ const DOM = (function() {
     elements.start.addEventListener('click', function() {
         //check if matrix length values == whole numbers
         if(storage.getDlength()%1==0 && storage.getTlength()%1==0) {
-            cleanInputContainers();
-            createMatrixTable(storage.getDlength(), elements.container1);
-            createMatrixTable(storage.getTlength(), elements.container2);
-            createFixDeptInput('div1');
+            _cleanInputContainers();
+            _createMatrixTable(storage.getDlength(), elements.container1);
+            _createMatrixTable(storage.getTlength(), elements.container2);
             //removes start button
             elements.div1.removeChild(elements.start);
             //creates enter
-            createEnterButton();
+            _createEnterButton();
         }
     });
 
-    const cleanInputContainers= () => {
+    const _cleanInputContainers= () => {
         elements.inputContainers.forEach(container=> {
             while(container.lastElementChild) {
                 container.removeChild(container.lastElementChild);
@@ -52,7 +51,7 @@ const DOM = (function() {
         })
     }
 
-    const createMatrixTable = (length, container) => {
+    const _createMatrixTable = (length, container) => {
         let headSign='';
         if(container== elements.container1) {
             headSign= 'L';
@@ -96,7 +95,7 @@ const DOM = (function() {
         container.appendChild(table);
     }
 
-    const createFixDeptInput = (div) => {
+    const _createFixInput = (parent) => {
         let label= document.createElement('label');
         label.setAttribute('for', 'fixDeptInput');
         label.textContent= 'Which department to fix first: '
@@ -106,19 +105,18 @@ const DOM = (function() {
         fixDeptInput.setAttribute('type', 'text');
         fixDeptInput.setAttribute('placeholder', 'W1');
     
-        let parent= document.getElementById(div);
         parent.appendChild(label);
         parent.appendChild(fixDeptInput);
     }
 
-    const createNewDiv= () => {
+    const _createNewDiv= () => {
         let newDiv= document.createElement('div');
         let number= document.querySelectorAll('.count').length;
 
-        newDiv.setAttribute('id', `div${number}`);
+        newDiv.setAttribute('id', `div${number+1}`);
         newDiv.classList.add('count');
 
-        document.body.appendChild(newDiv);
+        return newDiv;
     }
 
     const createLayoutTable= (layout) => {
@@ -148,31 +146,78 @@ const DOM = (function() {
         return table;
     }
 
+    const _createCTtable= (parent) => {
+        let length= storage.getTlength();
+        let matrix= Logic.createMatrixCT(length, storage.matrixT);
 
-    //compose function which uses all above functions to create a layout div
+        let table= document.createElement('table');
+            //first row: all headings
+            let firstRow= document.createElement('tr');
+                //empty 0,0 cell
+                let cell00= document.createElement('td');
+                firstRow.appendChild(cell00);
+                //remaining headings top
+                for(let i=1; i<=length; i++) {
+                    let heading= document.createElement('th');
+                    heading.textContent= 'W' + i;
+                    firstRow.appendChild(heading);
+                }
+            table.appendChild(firstRow);
 
-
+            //remaining rows: heading + data
+            for(let i=1; i<=length; i++) {
+                let row= document.createElement('tr');
+                    //add row elements
+                        //first heading
+                        let heading= document.createElement('th');
+                        heading.textContent= 'W' + i;
+                        row.appendChild(heading);
+                        //data
+                        for(let j=0; j<length; j++) {
+                            let cell= document.createElement('td');
+                            cell.textContent= matrix[i-1][j]
+                            row.appendChild(cell);
+                        }
+                table.appendChild(row);
+            }
+        parent.appendChild(table);
+    }
 
 
     //ENTER
-    const createEnterButton= () => {
-        let btn= document.createElement('button');
-        btn.textContent= 'ENTER';
+    const _createEnterButton= () => {
+        let enter= document.createElement('button');
+        enter.textContent= 'ENTER';
 
-        btn.addEventListener('click', function() {
+        enter.addEventListener('click', function() {
             //saves both tables to multidimensional arrays
             storage.saveTable(elements.container1);
             storage.saveTable(elements.container2);
 
-            //saves the chosen department to fix ??
-            
+            //creates new div w/ CT matrix, fixInput & calcBtn
+            let div= _createNewDiv();
+            _createCTtable(div);
+            _createFixInput(div);
+            _createCalcBtn(div);
+            document.body.appendChild(div);
+    
             //removes ENTER button
-            elements.div1.removeChild(btn);
+            elements.div1.removeChild(enter);
 
-            //creates new div = first layouts
         })
 
-        elements.div1.appendChild(btn);
+        elements.div1.appendChild(enter);
+    }
+
+    //CALCULATE
+    const _createCalcBtn= (parent) => {
+        let calc= document.createElement('button');
+        calc.textContent= "CALCULATE";
+
+        calc.addEventListener('click', function() {
+
+        })
+        parent.appendChild(calc);
     }
 
 
@@ -184,8 +229,7 @@ const DOM = (function() {
         elements,
         getAllContainerInputElements,
 
-        createNewDiv, //temporary??
-        createLayoutTable
+        createLayoutTable//temp
     }
 })();
 
@@ -207,7 +251,7 @@ const storage= (function() {
         
         let arr= Array.from(DOM.getAllContainerInputElements(container));
             arr.forEach(input => {
-                matrix.push(input.value);
+                matrix.push(Number(input.value));
             });
         //turn array of numbers into array of arrays --> each array is 1 row, and each element in array is the column index
         while(matrix.length) {
@@ -247,12 +291,12 @@ const storage= (function() {
     }
 })();
 
-const logic = (function() {
+const Logic = (function() {
 
-    const createMatrixCT= (length, T) => {
+    const createMatrixCT= (Tlength, T) => {
         let j=0;
         let matrixCT=[];
-        for(let i=0; i<length; i++) {
+        for(let i=0; i<Tlength; i++) {
             j=i;
             matrixCT.push([]);
             //add zeros to non-used fields
@@ -260,7 +304,7 @@ const logic = (function() {
                 matrixCT[i].push(0);
             }
             //adds cummulative transfers per depts.
-            for(j; j<length; j++) {
+            for(j; j<Tlength; j++) {
                 let ct= T[i][j] + T[j][i];
                 matrixCT[i].push(ct);
             }
@@ -295,7 +339,7 @@ const logic = (function() {
 
         //CRAFTlayouts[fixDept]= {};
 
-        for(let i=0; i<length; i++) {
+        for(let i=0; i<length; i++) { //length should equal length of remainingIndexes and loop through those
             let arr= [...array];
             let swaped= [arr[fixIndex], arr[i]] = [arr[i], arr[fixIndex]];
 
@@ -305,7 +349,6 @@ const logic = (function() {
                 CRAFTlayouts[i+1][arr[j]] = j;
             }
         }
-
     }
 
     //remove DEMOS!!!!
@@ -329,6 +372,8 @@ const logic = (function() {
     const getLowestCostLayout = () => {
         //how to get lowest property value in object
         //return property name (number in our case)
+
+        //UPDATE BEST LAYOUT VALUE
     }
 
     return {
