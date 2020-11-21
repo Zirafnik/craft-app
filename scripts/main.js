@@ -4,7 +4,11 @@ TO DO:
 -center table headings + td
 
 -finish CALC BUTTON:
-    -finish getRemainingLayouts -->check if same layout exists + new name system with layoutCounter
+    -finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST)
+    -main function
+    -saveLayout fix
+
+-remove demos from calculate costs
 
 LEARNED:
 -learned how to make HTML table
@@ -118,7 +122,7 @@ const DOM = (function() {
         return newDiv;
     }
 
-    const createLayoutTable= (layout) => {
+    const _createLayoutTable= (layout) => {
         let table= document.createElement('table');
 
         let length= Object.keys(layout).length;
@@ -185,6 +189,46 @@ const DOM = (function() {
         parent.appendChild(table);
     }
 
+    const _createEquation= (layoutObject) => {
+        let equation= '';
+
+        let length= Object.keys(layoutObject).length;
+        for(let i=0; i<length; i++) {
+            for(let j=0; j<length; j++) {
+                equation=equation + ` + T${i+1}${j+1}*D${layoutObject[`W${i+1}`]+1}${layoutObject[`W${j+1}`]+1}`;
+            }
+        }
+        //removes first '+' and adds 'S='
+        equation= equation.substring(2);
+        equation='S='.concat(equation);
+
+        return equation;
+    }
+
+    const _createEquationCT = (layoutObject) => {
+        let equation= '';
+        let j=0;
+
+        let length= Object.keys(layoutObject).length;
+        for(let i=0; i<length; i++) {
+            j=i;
+            for(j; j<length; j++) {
+                equation=equation + ` + CT${i+1}${j+1}*D${layoutObject[`W${i+1}`]+1}${layoutObject[`W${j+1}`]+1}`;
+            }
+        }
+        //removes first '+' and adds 'S='
+        equation= equation.substring(2);
+        equation='S='.concat(equation);
+
+        return equation;
+    }
+
+    const _createNewLayout= (layout) => {
+        let div= _createNewDiv;
+        let equation= _createEquation(layout);
+        let table= _createLayoutTable(layout);
+    }
+
 
     //ENTER
     const _createEnterButton= () => {
@@ -218,8 +262,15 @@ const DOM = (function() {
 
         calc.addEventListener('click', function() {
             Logic.getRemainingLayouts(storage.currentBestLayout, getCurrentFixInput());
-        })
 
+            function sthSth() {
+                //for(CRAFTlayouts.length - CRAFTlayoutCosts.length)
+                for(let key in Storage.CRAFTlayouts) {
+                    Logic.calculateLayoutCost(key);
+
+                }
+            }
+        })
         parent.appendChild(calc);
     }
 
@@ -242,7 +293,8 @@ const DOM = (function() {
         getAllContainerInputElements,
         getCurrentFixInput, //only used in calc button?
 
-        createLayoutTable//temp
+        _createEquation,
+        _createEquationCT
     }
 })();
 
@@ -258,6 +310,8 @@ const storage= (function() {
 
     let matrixD=[];
     let matrixT=[];
+    
+    let matrixCT=[];
 
     const saveTable= (container) => {
         let matrix=[];
@@ -285,8 +339,9 @@ const storage= (function() {
         //craft cost stored here
     };
 
-    const saveLayoutCost= () => {
-        // CRAFTlayoutCosts[costCounter]= calculateLayoutCost()
+    const saveLayoutCost= (cost) => {
+        craftLayoutCostCounter= craftLayoutCostCounter + 1;
+        CRAFTlayoutCosts[craftLayoutCostCounter]= cost;
     }
     
     let currentBestLayout=[/*gets initial values from creation of CT table*/];
@@ -294,6 +349,7 @@ const storage= (function() {
     let fixedDepts= [];
 
     let craftLayoutCounter= 0;
+    let craftLayoutCostCounter= 0;
 
 
     let matrixDdemo= [
@@ -310,12 +366,20 @@ const storage= (function() {
         [60, 10, 50, 0]
     ];
 
+    let matrixCTdemo= [
+        [0, 100, 60, 90],
+        [0, 0, 100, 10],
+        [0, 0, 0, 90],
+        [0, 0, 0, 0]
+    ];
+
     return {
         getDlength,
         getTlength,
         saveTable,
         matrixD,
         matrixT,
+        matrixCT,
         CRAFTlayouts,
         CRAFTlayoutCosts,
         currentBestLayout,
@@ -323,7 +387,8 @@ const storage= (function() {
         craftLayoutCounter,
 
         matrixDdemo,
-        matrixTdemo
+        matrixTdemo,
+        matrixCTdemo
     }
 })();
 
@@ -331,21 +396,22 @@ const Logic = (function() {
 
     const createMatrixCT= (Tlength, T) => {
         let j=0;
-        let matrixCT=[];
+        let matrix=[];
         for(let i=0; i<Tlength; i++) {
             j=i;
-            matrixCT.push([]);
+            matrix.push([]);
             //add zeros to non-used fields
             for(let h=0; h<j; h++) {
-                matrixCT[i].push(0);
+                matrix[i].push(0);
             }
             //adds cummulative transfers per depts.
             for(j; j<Tlength; j++) {
                 let ct= T[i][j] + T[j][i];
-                matrixCT[i].push(ct);
+                matrix[i].push(ct);
             }
         }
-        return matrixCT;
+        storage.matrixCT= matrix;
+        return matrix;
     }
 
     const _getRemainingIndexes= (bestLayoutArr, fixedDeptsArr) => {
@@ -388,12 +454,28 @@ const Logic = (function() {
     }
 
     //remove DEMOS!!!!
-    const calculateLayoutCost= (layoutObject, length) => {
+    const calculateLayoutCost= (layoutObject) => {
         let sumCost= 0;
 
+        let length= Object.keys(layoutObject).length;
         for(let i=0; i<length; i++) {
             for(let j=0; j<length; j++) {
                 sumCost=sumCost + storage.matrixTdemo[i][j] * storage.matrixDdemo[layoutObject[`W${i+1}`]][layoutObject[`W${j+1}`]];
+            }
+        }
+        //storage.saveLayoutCost(sumCost);
+        return sumCost;
+    }
+
+    const calculateLayoutCostCT= (layoutObject) => {
+        let sumCost= 0;
+        let j=0;
+
+        let length= Object.keys(layoutObject).length;
+        for(let i=0; i<length; i++) {
+            j=i;
+            for(j; j<length; j++) {
+                sumCost=sumCost + storage.matrixCTdemo[i][j] * storage.matrixDdemo[layoutObject[`W${i+1}`]][layoutObject[`W${j+1}`]];
             }
         }
         return sumCost;
@@ -411,6 +493,7 @@ const Logic = (function() {
     return {
         createMatrixCT,
         getRemainingLayouts,
-        calculateLayoutCost
+        calculateLayoutCost,
+        calculateLayoutCostCT
     }
 })();
