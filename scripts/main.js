@@ -96,11 +96,11 @@ const DOM = (function() {
 
     const _createFixInput = (parent) => {
         let label= document.createElement('label');
-        label.setAttribute('for', 'fixDeptInput');
-        label.textContent= 'Which department to fix first: '
+        //label.setAttribute('for', 'fixDeptInput');  //no need for ID unless we create custom idName for each?
+        label.textContent= 'Which department to fix first: ';
 
         let fixDeptInput= document.createElement('input');
-        fixDeptInput.setAttribute('id', 'fixDeptInput');
+        //fixDeptInput.setAttribute('id', 'fixDeptInput');
         fixDeptInput.setAttribute('type', 'text');
         fixDeptInput.setAttribute('placeholder', 'W1');
     
@@ -217,7 +217,7 @@ const DOM = (function() {
         calc.textContent= "CALCULATE";
 
         calc.addEventListener('click', function() {
-            Logic.getRemainingLayouts(storage.currentBestLayout, 'W1');
+            Logic.getRemainingLayouts(storage.currentBestLayout, getCurrentFixInput());
         })
 
         parent.appendChild(calc);
@@ -228,9 +228,19 @@ const DOM = (function() {
         return container.querySelectorAll('table tr input');
     }
 
+    const getCurrentFixInput= () => {
+        let inputs= document.body.querySelectorAll('div input[type=text]');
+        //get last value
+        let last= inputs[inputs.length -1];
+        let value= last.value;
+
+        return value;
+    }
+
     return {
         elements,
         getAllContainerInputElements,
+        getCurrentFixInput, //only used in calc button?
 
         createLayoutTable//temp
     }
@@ -279,10 +289,11 @@ const storage= (function() {
         // CRAFTlayoutCosts[costCounter]= calculateLayoutCost()
     }
     
-    //gets initial values from creation of CT table
-    let currentBestLayout=[];
+    let currentBestLayout=[/*gets initial values from creation of CT table*/];
     
     let fixedDepts= [];
+
+    let craftLayoutCounter= 0;
 
 
     let matrixDdemo= [
@@ -309,6 +320,7 @@ const storage= (function() {
         CRAFTlayoutCosts,
         currentBestLayout,
         fixedDepts,
+        craftLayoutCounter,
 
         matrixDdemo,
         matrixTdemo
@@ -347,6 +359,12 @@ const Logic = (function() {
     }
 
     const getRemainingLayouts= (bestLayoutArr, fixDept) => {
+        //if fixDept empty string
+        if(fixDept==false) {
+            console.log('no input');
+            return;
+        }
+
         //remaining locations
         let remLoc= _getRemainingIndexes(storage.currentBestLayout, storage.fixedDepts);
        
@@ -361,9 +379,10 @@ const Logic = (function() {
             let swaped= [arr[fixIndex], arr[remLoc[i]]] = [arr[remLoc[i]], arr[fixIndex]];
 
             //saves the layout
-            storage.CRAFTlayouts[i+1] = {};
+            storage.craftLayoutCounter= storage.craftLayoutCounter + 1;
+            storage.CRAFTlayouts[storage.craftLayoutCounter] = {};
             for(let j=0; j<bestLayoutArr.length; j++) {
-                storage.CRAFTlayouts[i+1][arr[j]] = j;
+                storage.CRAFTlayouts[storage.craftLayoutCounter][arr[j]] = j;
             }
         }
     }
