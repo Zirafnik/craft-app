@@ -1,10 +1,17 @@
 /*
 TO DO:
--make all input fieldS required
+-make all input fields required
 -center table headings + td
+*beautify
 
--finish CALC BUTTON:
-    -finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST)
+-finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST);
+-if multiple layouts with same cost, choose first? --> already chooses first? 
+-just create checks if already done ==> if fixDepts.length== layout.length -1:      CALC BTN??
+    -don't create another fix input
+    -print optimal layout
+-add layout name to each div + what is getting fixed: 'Fixing: W2'
+    -best div: 'Best layout: 3'
+-fixInput label text: custom for each input?
 
 -remove demos from calculate costs
 
