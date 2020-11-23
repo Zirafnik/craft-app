@@ -5,8 +5,6 @@ TO DO:
 
 -finish CALC BUTTON:
     -finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST)
-    -main function
-    -saveLayout fix
 
 -remove demos from calculate costs
 
@@ -253,7 +251,6 @@ const DOM = (function() {
         div.appendChild(resultCT);
 
         document.body.appendChild(div);
-        console.log('great');
     }
 
 
@@ -292,6 +289,8 @@ const DOM = (function() {
             let cost= Logic.calculateLayoutCost(layout);
             let costCT= Logic.calculateLayoutCostCT(layout);
 
+            storage.saveLayoutCost(cost);
+
             _createNewLayout(layout, cost, costCT);
         }
     }
@@ -304,6 +303,9 @@ const DOM = (function() {
             Logic.getRemainingLayouts(storage.currentBestLayout, getCurrentFixInput());
 
             _calculate();
+
+            let best= Logic.getBestLayout();
+            _createNewLayout(storage.CRAFTlayouts[best], storage.CRAFTlayoutCosts[best], storage.CRAFTlayoutCosts[best]);
         })
         parent.appendChild(calc);
     }
@@ -416,6 +418,7 @@ const storage= (function() {
         matrixCT,
         CRAFTlayouts,
         CRAFTlayoutCosts,
+        saveLayoutCost,
         currentBestLayout,
         fixedDepts,
         craftLayoutCounter,
@@ -517,17 +520,28 @@ const Logic = (function() {
 
 
     const getBestLayout = () => {
-        //how to get lowest property value in object
-        //return property name (number in our case)
+        //no need to iterate through all just last added layouts???
 
-        //UPDATE BEST LAYOUT VALUE
-        //saved fixed dept
+        //SORTING ALL
+        let sortedArr = Object.entries(storage.CRAFTlayoutCosts)
+        .sort(([,a],[,b]) => a-b);
+
+        let best= sortedArr[0][0];
+
+        //updates current best layout arr
+        storage.currentBestLayout= Object.keys(storage.CRAFTlayouts[best]);
+
+        //updated values of fixed depts - adds current fixDept value to array
+        storage.fixedDepts.push(DOM.getCurrentFixInput());
+
+        return best;
     }
 
     return {
         createMatrixCT,
         getRemainingLayouts,
         calculateLayoutCost,
-        calculateLayoutCostCT
+        calculateLayoutCostCT,
+        getBestLayout
     }
 })();
