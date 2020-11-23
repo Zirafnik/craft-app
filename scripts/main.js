@@ -202,7 +202,10 @@ const DOM = (function() {
         equation= equation.substring(2);
         equation='S='.concat(equation);
 
-        return equation;
+        let eqElem= document.createElement('p');
+        eqElem.textContent= equation;
+
+        return eqElem;
     }
 
     const _createEquationCT = (layoutObject) => {
@@ -220,13 +223,37 @@ const DOM = (function() {
         equation= equation.substring(2);
         equation='S='.concat(equation);
 
-        return equation;
+        let eqElem= document.createElement('p');
+        eqElem.textContent= equation;
+
+        return eqElem;
     }
 
-    const _createNewLayout= (layout) => {
-        let div= _createNewDiv;
-        let equation= _createEquation(layout);
+    const _addResult = (cost) => {
+        let string= '= ' + cost;
+
+        let costElem= document.createElement('p');
+        costElem.textContent= string;
+
+        return costElem;
+    }
+
+    const _createNewLayout= (layout, cost, costCT) => {
+        let div= _createNewDiv();
         let table= _createLayoutTable(layout);
+        let equation= _createEquation(layout);
+        let result= _addResult(cost);
+        let equationCT= _createEquationCT(layout);
+        let resultCT= _addResult(costCT);
+
+        div.appendChild(table);
+        div.appendChild(equation);
+        div.appendChild(result);
+        div.appendChild(equationCT);
+        div.appendChild(resultCT);
+
+        document.body.appendChild(div);
+        console.log('great');
     }
 
 
@@ -256,6 +283,19 @@ const DOM = (function() {
     }
 
     //CALCULATE
+    function _calculate() {
+        let layoutsLength= Object.keys(storage.CRAFTlayouts).length;
+        let costLength= Object.keys(storage.CRAFTlayoutCosts).length;
+        
+        for(let i= costLength+1; i<=layoutsLength; i++) {
+            let layout= storage.CRAFTlayouts[i];
+            let cost= Logic.calculateLayoutCost(layout);
+            let costCT= Logic.calculateLayoutCostCT(layout);
+
+            _createNewLayout(layout, cost, costCT);
+        }
+    }
+
     const _createCalcBtn= (parent) => {
         let calc= document.createElement('button');
         calc.textContent= "CALCULATE";
@@ -263,13 +303,7 @@ const DOM = (function() {
         calc.addEventListener('click', function() {
             Logic.getRemainingLayouts(storage.currentBestLayout, getCurrentFixInput());
 
-            function sthSth() {
-                //for(CRAFTlayouts.length - CRAFTlayoutCosts.length)
-                for(let key in Storage.CRAFTlayouts) {
-                    Logic.calculateLayoutCost(key);
-
-                }
-            }
+            _calculate();
         })
         parent.appendChild(calc);
     }
