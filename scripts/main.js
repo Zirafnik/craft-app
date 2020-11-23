@@ -299,13 +299,29 @@ const DOM = (function() {
         let calc= document.createElement('button');
         calc.textContent= "CALCULATE";
 
-        calc.addEventListener('click', function() {
+        calc.addEventListener('click', function(e) {
+            //remove calc btn
+            if(getCurrentFixInput()=='') {
+                console.log('no input');
+                return;
+            }
+            e.target.parentElement.removeChild(e.target);
+
+            //Process
             Logic.getRemainingLayouts(storage.currentBestLayout, getCurrentFixInput());
 
             _calculate();
 
+            //print best layout
             let best= Logic.getBestLayout();
             _createNewLayout(storage.CRAFTlayouts[best], storage.CRAFTlayoutCosts[best], storage.CRAFTlayoutCosts[best]);
+
+            //create new input
+            let div= _createNewDiv();
+            _createFixInput(div);
+            _createCalcBtn(div);
+
+            document.body.appendChild(div);
         })
         parent.appendChild(calc);
     }
@@ -462,12 +478,6 @@ const Logic = (function() {
     }
 
     const getRemainingLayouts= (bestLayoutArr, fixDept) => {
-        //if fixDept empty string
-        if(fixDept==false) {
-            console.log('no input');
-            return;
-        }
-
         //remaining locations
         let remLoc= _getRemainingIndexes(storage.currentBestLayout, storage.fixedDepts);
        
