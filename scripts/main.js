@@ -4,7 +4,7 @@ TO DO:
 -center table headings + td
 *beautify
 
--finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST);
+[DONE]finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST);
 -if multiple layouts with same cost, choose first? --> already chooses first? 
 -just create checks if already done ==> if fixDepts.length== layout.length -1:      CALC BTN??
     -don't create another fix input
@@ -492,17 +492,24 @@ const Logic = (function() {
 
         let numCombos= remLoc.length;
 
-        //also check if same layout exists?
 
         for(let i=0; i<numCombos; i++) { //length should equal length of remainingIndexes and loop through those
             let arr= [...bestLayoutArr];
             let swaped= [arr[fixIndex], arr[remLoc[i]]] = [arr[remLoc[i]], arr[fixIndex]];
 
-            //saves the layout
-            storage.craftLayoutCounter= storage.craftLayoutCounter + 1;
-            storage.CRAFTlayouts[storage.craftLayoutCounter] = {};
-            for(let j=0; j<bestLayoutArr.length; j++) {
-                storage.CRAFTlayouts[storage.craftLayoutCounter][arr[j]] = j;
+            //checks if layout equals to already best layout
+            if(remLoc.length != bestLayoutArr.length && arr.every((value, index) => value === bestLayoutArr[index])) {
+                console.log('same value');
+                console.log(arr);
+                console.log(bestLayoutArr);
+                continue;
+            } else {
+                //saves the layout
+                storage.craftLayoutCounter= storage.craftLayoutCounter + 1;
+                storage.CRAFTlayouts[storage.craftLayoutCounter] = {};
+                for(let j=0; j<bestLayoutArr.length; j++) {
+                    storage.CRAFTlayouts[storage.craftLayoutCounter][arr[j]] = j;
+                }
             }
         }
     }
