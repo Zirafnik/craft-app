@@ -5,9 +5,9 @@ TO DO:
 *beautify
 
 [DONE]finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST);
--if multiple layouts with same cost, choose first? --> already chooses first? 
--just create checks if already done ==> if fixDepts.length== layout.length -1:      CALC BTN??
-    -don't create another fix input
+
+[DONE]just create checks if already done ==> if fixDepts.length== layout.length -1:      CALC BTN??
+    [DONE]don't create another fix input
     -print optimal layout
 -add layout name to each div + what is getting fixed: 'Fixing: W2'
     -best div: 'Best layout: 3'
@@ -313,6 +313,7 @@ const DOM = (function() {
                 return;
             }
             e.target.parentElement.removeChild(e.target);
+            
 
             //Process
             Logic.getRemainingLayouts(storage.currentBestLayout, getCurrentFixInput());
@@ -323,12 +324,18 @@ const DOM = (function() {
             let best= Logic.getBestLayout();
             _createNewLayout(storage.CRAFTlayouts[best], storage.CRAFTlayoutCosts[best], storage.CRAFTlayoutCosts[best]);
 
-            //create new input
-            let div= _createNewDiv();
-            _createFixInput(div);
-            _createCalcBtn(div);
+            //checks if DONE --> last layout
+            if(storage.fixedDepts.length == storage.currentBestLayout.length-1) {
+                //print OPTIMAL RESULT
+                return;
+            } else {
+                //create new input
+                let div= _createNewDiv();
+                _createFixInput(div);
+                _createCalcBtn(div);
 
-            document.body.appendChild(div);
+                document.body.appendChild(div);
+            }
         })
         parent.appendChild(calc);
     }
