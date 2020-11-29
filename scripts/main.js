@@ -9,6 +9,7 @@ TO DO:
 [DONE]just create checks if already done ==> if fixDepts.length== layout.length -1:      CALC BTN??
     [DONE]don't create another fix input
     -print optimal layout
+
 -add layout name to each div + what is getting fixed: 'Fixing: W2'
     -best div: 'Best layout: 3'
 -fixInput label text: custom for each input?
@@ -326,7 +327,21 @@ const DOM = (function() {
 
             //checks if DONE --> last layout
             if(storage.fixedDepts.length == storage.currentBestLayout.length-1) {
-                //print OPTIMAL RESULT
+                //prints optimal div
+                Logic.getAllPermutations(storage.currentBestLayout);
+
+                let layoutsLength= Object.keys(storage.OPTIMALlayouts).length;
+                for(let i=1; i<=layoutsLength; i++) {
+                    let layout= storage.OPTIMALlayouts[i];
+                    let cost= Logic.calculateLayoutCost(layout);
+
+                    storage.saveOptimalCost(cost);
+                }
+
+                let sortedArr = Object.entries(storage.OPTIMALlayoutCosts).sort(([,a],[,b]) => a-b);
+                let optimal= sortedArr[0][0];
+
+                _createNewLayout(storage.OPTIMALlayouts[optimal], storage.OPTIMALlayoutCosts[optimal], storage.OPTIMALlayoutCosts[optimal]);
                 return;
             } else {
                 //create new input
@@ -409,6 +424,19 @@ const storage= (function() {
         craftLayoutCostCounter= craftLayoutCostCounter + 1;
         CRAFTlayoutCosts[craftLayoutCostCounter]= cost;
     }
+
+    let OPTIMALlayouts= {
+        //all layouts
+    }
+
+    let OPTIMALlayoutCosts= {
+        //optimal costs
+    }
+
+    const saveOptimalCost= (cost) => {
+        optimalLayoutCostCounter= optimalLayoutCostCounter + 1;
+        OPTIMALlayoutCosts[optimalLayoutCostCounter]= cost;
+    }
     
     let currentBestLayout=[/*gets initial values from creation of CT table*/];
     
@@ -416,6 +444,9 @@ const storage= (function() {
 
     let craftLayoutCounter= 0;
     let craftLayoutCostCounter= 0;
+
+    let optimalLayoutCounter= 0;
+    let optimalLayoutCostCounter= 0;
 
 
     let matrixDdemo= [
@@ -452,6 +483,10 @@ const storage= (function() {
         currentBestLayout,
         fixedDepts,
         craftLayoutCounter,
+        OPTIMALlayouts,
+        OPTIMALlayoutCosts,
+        saveOptimalCost,
+        optimalLayoutCounter,
 
         matrixDdemo,
         matrixTdemo,
@@ -521,6 +556,38 @@ const Logic = (function() {
         }
     }
 
+    const _permutator= (bestLayoutArr) => {
+        let result = [];
+
+        const permute = (arr, m = []) => {
+          if (arr.length === 0) {
+            result.push(m)
+          } else {
+            for (let i = 0; i < arr.length; i++) {
+              let curr = arr.slice();
+              let next = curr.splice(i, 1);
+              permute(curr.slice(), m.concat(next))
+           }
+         }
+       }
+      
+       permute(bestLayoutArr)
+      
+       return result;
+    }
+
+    const getAllPermutations= (startingArr) => {
+        let perms= _permutator(startingArr);
+
+        perms.forEach(perm => {
+            storage.optimalLayoutCounter= storage.optimalLayoutCounter + 1;
+            storage.OPTIMALlayouts[storage.optimalLayoutCounter] = {};
+            for(let i=0; i<perm.length; i++) {
+                storage.OPTIMALlayouts[storage.optimalLayoutCounter][perm[i]] = i;
+            }
+        })      
+    }
+
     //remove DEMOS!!!!
     const calculateLayoutCost= (layoutObject) => {
         let sumCost= 0;
@@ -571,6 +638,7 @@ const Logic = (function() {
     return {
         createMatrixCT,
         getRemainingLayouts,
+        getAllPermutations,
         calculateLayoutCost,
         calculateLayoutCostCT,
         getBestLayout
