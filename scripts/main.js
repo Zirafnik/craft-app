@@ -4,13 +4,11 @@ TO DO:
 -center table headings + td
 *beautify
 
-[DONE]finish getRemainingLayouts -->check if same layout exists(NO NEED TO COMPARE TO ALL LAYOUTS, JUST CURRENT BEST);
+[DONE] bugfix: creating wrong diagonal values between same depts in CT
 
-[DONE]just create checks if already done ==> if fixDepts.length== layout.length -1:      CALC BTN??
-    [DONE]don't create another fix input
-    -print optimal layout
+(-figure out how to make names always a certain amount from the table --> stick table into a div elem??)
 
--add layout name to each div + what is getting fixed: 'Fixing: W2'
+-add layout name to each div + what is getting fixed: 'Fix: W2'
     -best div: 'Best layout: 3'
 -fixInput label text: custom for each input?
 
@@ -43,6 +41,9 @@ const DOM = (function() {
         //check if matrix length values == whole numbers
         if(storage.getDlength()%1==0 && storage.getTlength()%1==0) {
             _cleanInputContainers();
+
+            _createMatrixName('D', elements.div1);
+            _createMatrixName('T', elements.div1);
             _createMatrixTable(storage.getDlength(), elements.container1);
             _createMatrixTable(storage.getTlength(), elements.container2);
             //removes start button
@@ -51,6 +52,14 @@ const DOM = (function() {
             _createEnterButton();
         }
     });
+
+    const _createMatrixName= (matrix, div) => {
+        let name= document.createElement('div');
+        name.textContent= matrix + ' =';
+        name.classList.add('names');
+        name.setAttribute('id', 'name' + matrix);
+        div.appendChild(name);
+    }
 
     const _cleanInputContainers= () => {
         elements.inputContainers.forEach(container=> {
@@ -78,6 +87,7 @@ const DOM = (function() {
                 for(let i=1; i<=length; i++) {
                     let heading= document.createElement('th');
                     heading.textContent= headSign + i;
+                    heading.classList.add('matrix-headings');
                     firstRow.appendChild(heading);
                 }
             table.appendChild(firstRow);
@@ -89,6 +99,7 @@ const DOM = (function() {
                         //first heading
                         let heading= document.createElement('th');
                         heading.textContent= headSign + i;
+                        heading.classList.add('matrix-headings');
                         row.appendChild(heading);
                         //data
                         for(let i=0; i<length; i++) {
@@ -113,17 +124,21 @@ const DOM = (function() {
         //fixDeptInput.setAttribute('id', 'fixDeptInput');
         fixDeptInput.setAttribute('type', 'text');
         fixDeptInput.setAttribute('placeholder', 'W1');
-    
-        parent.appendChild(label);
-        parent.appendChild(fixDeptInput);
+
+        let div= document.createElement('div');
+        div.classList.add('fixInput');
+        div.appendChild(label);
+        div.appendChild(fixDeptInput);
+
+        parent.appendChild(div);
     }
 
     const _createNewDiv= () => {
         let newDiv= document.createElement('div');
-        let number= document.querySelectorAll('.count').length;
+        let number= document.querySelectorAll('.divs').length;
 
         newDiv.setAttribute('id', `div${number+1}`);
-        newDiv.classList.add('count');
+        newDiv.classList.add('divs');
 
         return newDiv;
     }
@@ -169,6 +184,7 @@ const DOM = (function() {
                 for(let i=1; i<=length; i++) {
                     let heading= document.createElement('th');
                     heading.textContent= 'W' + i;
+                    heading.classList.add('CTmatrix-headings');
                     firstRow.appendChild(heading);
 
                     //first layout to be used in calculations
@@ -183,15 +199,18 @@ const DOM = (function() {
                         //first heading
                         let heading= document.createElement('th');
                         heading.textContent= 'W' + i;
+                        heading.classList.add('CTmatrix-headings');
                         row.appendChild(heading);
                         //data
                         for(let j=0; j<length; j++) {
                             let cell= document.createElement('td');
                             cell.textContent= matrix[i-1][j]
+                            cell.classList.add('CTmatrix-cells');
                             row.appendChild(cell);
                         }
                 table.appendChild(row);
             }
+            table.classList.add('CT');
         parent.appendChild(table);
     }
 
@@ -210,6 +229,7 @@ const DOM = (function() {
 
         let eqElem= document.createElement('p');
         eqElem.textContent= equation;
+        eqElem.classList.add('equations');
 
         return eqElem;
     }
@@ -231,6 +251,7 @@ const DOM = (function() {
 
         let eqElem= document.createElement('p');
         eqElem.textContent= equation;
+        eqElem.classList.add('equations');
 
         return eqElem;
     }
@@ -274,6 +295,7 @@ const DOM = (function() {
 
             //creates new div w/ CT matrix, fixInput & calcBtn
             let div= _createNewDiv();
+            _createMatrixName('CT', div);
             _createCTtable(div);
             _createFixInput(div);
             _createCalcBtn(div);
@@ -306,6 +328,7 @@ const DOM = (function() {
     const _createCalcBtn= (parent) => {
         let calc= document.createElement('button');
         calc.textContent= "CALCULATE";
+        calc.classList.add('calcBtn');
 
         calc.addEventListener('click', function(e) {
             //remove calc btn
@@ -508,7 +531,13 @@ const Logic = (function() {
             }
             //adds cummulative transfers per depts.
             for(j; j<Tlength; j++) {
-                let ct= T[i][j] + T[j][i];
+                let ct=0;
+                //if diagonal (in case of non-zero between depts)
+                if(j==i) {
+                    ct= T[i][j];
+                } else {
+                    ct= T[i][j] + T[j][i];
+                }
                 matrix[i].push(ct);
             }
         }
