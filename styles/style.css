@@ -28,24 +28,93 @@ h1 {
 
 #div1 {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 7fr 1fr 2fr;
 
     grid-template-areas: 
-    "matrix1 matrix2"
-    "question question"
-    "button button";
+    "matrix1 . matrix2"
+    ". . ."
+    ". mid .";
+
+    margin-right: 300px;
+    margin-left: 300px;
 }
 
 #div2 {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 7fr 1fr 2fr;
+    grid-template-columns: 2fr 2fr 2fr;
+    grid-template-rows: 2fr 1fr 1fr;
 
     grid-template-areas:
     ". CT ."
-    "input input input"
+    "fix fix fix"
     ". calculate .";
+
+    margin-right: 300px;
+    margin-left: 300px;
+}
+
+.names {
+    align-self: center;
+    justify-self: left;
+    
+    font-size: 22px;
+}
+
+#nameD {
+    grid-area: matrix1;
+}
+
+#nameT {
+    grid-area: matrix2;
+}
+
+#nameCT {
+    grid-area: CT;
+}
+
+.CT {
+    grid-area: CT;
+
+    align-self: center;
+    justify-self: center;
+}
+
+.CTmatrix-cells {
+    height: 25px;
+    width: 25px;
+
+    padding-left: 8px;
+    padding-top: 8px;
+}
+
+.CTmatrix-headings {
+    height: 25px;
+    width: 25px;
+
+    padding-left: 8px;
+    padding-top: 8px;
+
+    font-weight: 600;
+}
+
+.fixInput {
+    grid-area: fix;
+
+    align-self: center;
+    justify-self: center;
+}
+
+.calcBtn {
+    grid-area: calculate;
+}
+
+.divs {
+    margin: 20px;
+}
+
+.equations {
+    margin: 5px;
 }
 
 .inputContainer {
@@ -57,9 +126,6 @@ h1 {
     justify-self: center;
     align-self: center;
 
-    height: 200px;
-    width: 200px;
-
     display: grid;
     grid-template-columns: repeat(var(--matrix-length-D), 1fr);
     grid-template-rows: repeat(var(--matrix-length-D), 1fr);
@@ -70,25 +136,37 @@ h1 {
     justify-self: center;
     align-self: center;
 
-    height: 200px;
-    width: 200px;
-
     display: grid;
     grid-template-columns: repeat(var(--matrix-length-T), 1fr);
     grid-template-rows: repeat(var(--matrix-length-T), 1fr);
 }
 
+th, td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+button {
+    grid-area: mid;
+}
+
 .matrix-inputs {
     height: 25px;
     width: 25px;
+
+    margin: 4px;
+
     background-color: lightcyan;
+}
+
+.matrix-headings {
+    height: 25px;
+    width: 25px;
+
+    font-weight: 600;
 }
 
 .layoutTable {
     border: 1px solid black;
     border-collapse: collapse;
-}
-
-button {
-    grid-area: button;
 }
