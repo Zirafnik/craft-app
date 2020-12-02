@@ -1,16 +1,15 @@
 /*
 TO DO:
 -make all input fields required
--center table headings + td
 *beautify
-
-[DONE] bugfix: creating wrong diagonal values between same depts in CT
 
 (-figure out how to make names always a certain amount from the table --> stick table into a div elem??)
 
 -add layout name to each div + what is getting fixed: 'Fix: W2'
     -best div: 'Best layout: 3'
 -fixInput label text: custom for each input?
+
+-input errors
 
 -remove demos from calculate costs
 
@@ -287,6 +286,7 @@ const DOM = (function() {
     const _createEnterButton= () => {
         let enter= document.createElement('button');
         enter.textContent= 'ENTER';
+        enter.setAttribute('id', 'enter');
 
         enter.addEventListener('click', function() {
             //saves both tables to multidimensional arrays

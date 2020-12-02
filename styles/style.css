@@ -26,6 +26,46 @@ h1 {
     font-weight: 800;
 }
 
+button, input {
+    cursor: pointer;
+}
+
+.size-text {
+    font-size: 20px;
+
+    margin: 5px;
+}
+
+.size-input {
+    justify-self: center;
+
+    height: 35px;
+    width: 40px;
+
+    text-align: center;
+    font-size: 22px;
+}
+
+#start {
+    height: 60px;
+    width: 200px;
+
+    justify-self: center;
+
+    font-size: 30px;
+    letter-spacing: 3px;
+}
+
+#enter {
+    height: 60px;
+    width: 300px;
+
+    justify-self: center;
+
+    font-size: 30px;
+    letter-spacing: 3px;
+}
+
 #div1 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -36,8 +76,8 @@ h1 {
     ". . ."
     ". mid .";
 
-    margin-right: 300px;
-    margin-left: 300px;
+    margin-right: 250px;
+    margin-left: 250px;
 }
 
 #div2 {
@@ -107,6 +147,14 @@ h1 {
 
 .calcBtn {
     grid-area: calculate;
+
+    height: 50px;
+    width: 220px;
+
+    justify-self: center;
+
+    font-size: 24px;
+    letter-spacing: 2px;
 }
 
 .divs {
