@@ -5,11 +5,11 @@ TO DO:
 
 (-figure out how to make names always a certain amount from the table --> stick table into a div elem??)
 
+-test bigger matrix values + how they look
+
 -add layout name to each div + what is getting fixed: 'Fix: W2'
     -best div: 'Best layout: 3'
 -fixInput label text: custom for each input?
-
--input errors
 
 -remove demos from calculate costs
 
@@ -37,6 +37,17 @@ const DOM = (function() {
     //EVENT LISTENERS
     //START
     elements.start.addEventListener('click', function() {
+        //checks if empty
+        if(storage.getDlength()==false || storage.getTlength()==false) {
+            return;
+        }
+
+        //checks if lower than
+        if(storage.getDlength()>'7' || storage.getTlength()>'7') {
+            alert('You can only choose sizes between 1-7');
+            return;
+        }
+
         //check if matrix length values == whole numbers
         if(storage.getDlength()%1==0 && storage.getTlength()%1==0) {
             _cleanInputContainers();
@@ -49,6 +60,9 @@ const DOM = (function() {
             elements.div1.removeChild(elements.start);
             //creates enter
             _createEnterButton();
+        } else {
+            alert('You can only input whole numbers (integers)!');
+            return;
         }
     });
 
@@ -105,7 +119,8 @@ const DOM = (function() {
                             let cell= document.createElement('td');
                                 let input=document.createElement('input');
                                 input.classList.add('matrix-inputs');
-                                input.setAttribute("type", "number");
+                                input.setAttribute("type", "text");
+                                input.required= true;
                                 cell.appendChild(input);
                             row.appendChild(cell);
                         }
@@ -296,6 +311,23 @@ const DOM = (function() {
         enter.setAttribute('id', 'enter');
 
         enter.addEventListener('click', function() {
+
+            //checks if all inputs correct
+            let regex= /[0-9]/;
+            let mtx1= Array.from(getAllContainerInputElements(elements.container1));
+            let mtx1Arr= [];
+            mtx1.forEach(element => mtx1Arr.push(element.value));
+
+            let mtx2= Array.from(getAllContainerInputElements(elements.container2));
+            let mtx2Arr= [];
+            mtx2.forEach(element => mtx2Arr.push(element.value));
+
+            if(mtx1Arr.includes('') || mtx1Arr.filter(input => regex.test(input)==false).length>0
+            || mtx2Arr.includes('') || mtx2Arr.filter(input => regex.test(input)==false).length>0) {
+                alert('Incorrect input!');
+                return;
+            }
+
             //saves both tables to multidimensional arrays
             storage.saveTable(elements.container1);
             storage.saveTable(elements.container2);
