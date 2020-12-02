@@ -117,7 +117,14 @@ const DOM = (function() {
     const _createFixInput = (parent) => {
         let label= document.createElement('label');
         //label.setAttribute('for', 'fixDeptInput');  //no need for ID unless we create custom idName for each?
-        label.textContent= 'Which department to fix first: ';
+
+        let round= '';
+        if(storage.fixedDepts.length==0) {
+            round= 'first';
+        } else {
+            round= 'next';
+        }
+        label.textContent= `Which department to fix ${round}: `;
 
         let fixDeptInput= document.createElement('input');
         //fixDeptInput.setAttribute('id', 'fixDeptInput');
@@ -333,9 +340,21 @@ const DOM = (function() {
         calc.addEventListener('click', function(e) {
             //remove calc btn
             if(getCurrentFixInput()=='') {
-                console.log('no input');
+                alert('Choose which department to fix:');
                 return;
             }
+
+            if(storage.fixedDepts.includes(getCurrentFixInput())) {
+                alert('Chosen department is already fixed!');
+                return;
+            }
+
+            let regex= /W[0-9]/;
+            if(regex.test(getCurrentFixInput())==false) {
+                alert('Incorrect input! (example of allowed input: W3)');
+                return;
+            }
+
             e.target.parentElement.removeChild(e.target);
             
 
