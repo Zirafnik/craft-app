@@ -1,15 +1,18 @@
 /*
 TO DO:
--make all input fields required
 *beautify
+-get rid of CSS margins in px; use %
+-fix input styling
 
 (-figure out how to make names always a certain amount from the table --> stick table into a div elem??)
 
 -test bigger matrix values + how they look
+-bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
 
--add layout name to each div + what is getting fixed: 'Fix: W2'
-    -best div: 'Best layout: 3'
--fixInput label text: custom for each input?
+[DONE]add layout name to each div 
++ what is getting fixed: 'Fix: W2'
+    [DONE]best div: 'Best layout: 3'
+    [DONE]OPTIMAL LAYOUT
 
 -remove demos from calculate costs
 
@@ -151,12 +154,14 @@ const DOM = (function() {
         div.appendChild(label);
         div.appendChild(fixDeptInput);
 
+        parent.classList.remove('divs');
+        parent.classList.add('inputDiv');
         parent.appendChild(div);
     }
 
     const _createNewDiv= () => {
         let newDiv= document.createElement('div');
-        let number= document.querySelectorAll('.divs').length;
+        let number= document.querySelectorAll('.divs').length + document.querySelectorAll('.inputDiv').length;
 
         newDiv.setAttribute('id', `div${number+1}`);
         newDiv.classList.add('divs');
@@ -173,7 +178,7 @@ const DOM = (function() {
         for(let i=0; i<length; i++) {
             let room= document.createElement('td');
             room.textContent= `L${i+1}`;
-            room.classList.add('layoutTable');
+            room.classList.add('layoutTableCell');
             firstRow.appendChild(room);
         }
 
@@ -181,12 +186,14 @@ const DOM = (function() {
         for(let i=0; i<length; i++) {
             let dept= document.createElement('td');
             dept.textContent= Object.keys(layout)[i];
-            dept.classList.add('layoutTable');
+            dept.classList.add('layoutTableCell');
             secondRow.appendChild(dept);
         }
 
         table.appendChild(firstRow);
         table.appendChild(secondRow);
+
+        table.classList.add('layoutTable');
 
         return table;
     }
@@ -286,7 +293,7 @@ const DOM = (function() {
         return costElem;
     }
 
-    const _createNewLayout= (layout, cost, costCT) => {
+    const _createNewLayout= (layout, cost, costCT, status, bestOrFix) => {
         let div= _createNewDiv();
         let table= _createLayoutTable(layout);
         let equation= _createEquation(layout);
@@ -294,6 +301,22 @@ const DOM = (function() {
         let equationCT= _createEquationCT(layout);
         let resultCT= _addResult(costCT);
 
+        let layoutName= document.createElement('p');
+
+        if(/[0-9]+/.test(status)) {
+            layoutName.textContent=`Layout: ${status}`;
+
+            let layoutFix= document.createElement('p');
+            layoutFix.textContent= `Fixing: ${bestOrFix}`;
+            //div.appendChild(layoutFix);
+            
+        } else if(status == 'best') {
+            layoutName.textContent= `Best layout: ${bestOrFix}`;
+        } else if(status == 'optimal') {
+            layoutName.textContent= 'OPTIMAL LAYOUT';
+        }
+
+        div.appendChild(layoutName);
         div.appendChild(table);
         div.appendChild(equation);
         div.appendChild(result);
@@ -311,7 +334,7 @@ const DOM = (function() {
         enter.setAttribute('id', 'enter');
 
         enter.addEventListener('click', function() {
-
+            /*
             //checks if all inputs correct
             let regex= /[0-9]/;
             let mtx1= Array.from(getAllContainerInputElements(elements.container1));
@@ -324,9 +347,10 @@ const DOM = (function() {
 
             if(mtx1Arr.includes('') || mtx1Arr.filter(input => regex.test(input)==false).length>0
             || mtx2Arr.includes('') || mtx2Arr.filter(input => regex.test(input)==false).length>0) {
-                alert('Incorrect input!');
+                alert('Incorrect or empty inputs!');
                 return;
             }
+            */
 
             //saves both tables to multidimensional arrays
             storage.saveTable(elements.container1);
@@ -360,7 +384,8 @@ const DOM = (function() {
 
             storage.saveLayoutCost(cost);
 
-            _createNewLayout(layout, cost, costCT);
+            let fixing= getCurrentFixInput();
+            _createNewLayout(layout, cost, costCT, i, fixing);
         }
     }
 
@@ -397,7 +422,7 @@ const DOM = (function() {
 
             //print best layout
             let best= Logic.getBestLayout();
-            _createNewLayout(storage.CRAFTlayouts[best], storage.CRAFTlayoutCosts[best], storage.CRAFTlayoutCosts[best]);
+            _createNewLayout(storage.CRAFTlayouts[best], storage.CRAFTlayoutCosts[best], storage.CRAFTlayoutCosts[best], 'best', best);
 
             //checks if DONE --> last layout
             if(storage.fixedDepts.length == storage.currentBestLayout.length-1) {
@@ -415,7 +440,7 @@ const DOM = (function() {
                 let sortedArr = Object.entries(storage.OPTIMALlayoutCosts).sort(([,a],[,b]) => a-b);
                 let optimal= sortedArr[0][0];
 
-                _createNewLayout(storage.OPTIMALlayouts[optimal], storage.OPTIMALlayoutCosts[optimal], storage.OPTIMALlayoutCosts[optimal]);
+                _createNewLayout(storage.OPTIMALlayouts[optimal], storage.OPTIMALlayoutCosts[optimal], storage.OPTIMALlayoutCosts[optimal], 'optimal', 0);
                 return;
             } else {
                 //create new input
