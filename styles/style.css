@@ -78,12 +78,14 @@ button, input {
 
     margin-right: 250px;
     margin-left: 250px;
+
+    border: none;
 }
 
 #div2 {
     display: grid;
     grid-template-columns: 2fr 2fr 2fr;
-    grid-template-rows: 2fr 1fr 1fr;
+    grid-template-rows: 3fr 2fr 1fr;
 
     grid-template-areas:
     ". CT ."
@@ -92,6 +94,8 @@ button, input {
 
     margin-right: 300px;
     margin-left: 300px;
+
+    border: none;
 }
 
 .names {
@@ -145,6 +149,15 @@ button, input {
     justify-self: center;
 }
 
+.inputDiv {
+    border: none;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .calcBtn {
     grid-area: calculate;
 
@@ -158,11 +171,22 @@ button, input {
 }
 
 .divs {
-    margin: 20px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+
+    margin-left: 150px;
+    margin-right: 150px;
+
+    border: 1px black solid;
+    border-radius: 5px;
+
+    padding: 10px;
 }
 
 .equations {
     margin: 5px;
+
+    text-align-last: justify;
 }
 
 .inputContainer {
@@ -214,7 +238,15 @@ button {
     font-weight: 600;
 }
 
-.layoutTable {
+.layoutTableCell {
     border: 1px solid black;
     border-collapse: collapse;
+
+    padding: 4px;
+    font-size: 17px;
+
+}
+
+.layoutTable {
+    margin-bottom: 15px;    
 }
