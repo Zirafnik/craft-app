@@ -71,21 +71,24 @@ button, input {
 }
 
 .ctDiv {
-    grid-area: CT;
-
-    align-self: center;
-    justify-self: center;
-
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin: 10px;
 }
 
 #nameCT {
     grid-area: CT;
+    margin-top: 25px;
 }
 
 .tableCTDiv {
     grid-area: CT;
+
+    margin-left: 20px;
+    margin-right: 20px;
 
     align-self: center;
     justify-self: center;
@@ -94,11 +97,10 @@ button, input {
 #div1 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 7fr 1fr 2fr;
+    grid-template-rows: 7fr 2fr;
 
     grid-template-areas: 
     "matrix1 . matrix2"
-    ". . ."
     ". mid .";
 
     margin-right: 250px;
@@ -155,6 +157,20 @@ button, input {
 
     align-self: center;
     justify-self: center;
+
+    margin-top: 30px;
+    margin-bottom: 20px;
+
+    font-size: 18px;
+}
+
+.fixInputInput {
+    font-size: 18px;
+
+    height: 30px;
+    width: 40px;
+
+    text-align: center;
 }
 
 .inputDiv {
@@ -179,8 +195,8 @@ button, input {
 }
 
 .divs {
-    margin-top: 50px;
-    margin-bottom: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 
     margin-left: 150px;
     margin-right: 150px;

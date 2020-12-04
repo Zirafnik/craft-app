@@ -1,14 +1,11 @@
 /*
 TO DO:
 -get rid of CSS margins in px; use %
--fix input styling
 
 (-figure out how to make names always a certain amount from the table --> stick table into a div elem??)
 
 -test bigger matrix values (time) + how they look
 -bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
-
--turn Div2 into flex
 
 -remove demos from calculate costs
 
@@ -142,7 +139,7 @@ const DOM = (function() {
         label.textContent= `Which department to fix ${round}: `;
 
         let fixDeptInput= document.createElement('input');
-        //fixDeptInput.setAttribute('id', 'fixDeptInput');
+        fixDeptInput.classList.add('fixInputInput');
         fixDeptInput.setAttribute('type', 'text');
         fixDeptInput.setAttribute('placeholder', 'W1');
 
