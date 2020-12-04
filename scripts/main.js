@@ -75,7 +75,7 @@ const DOM = (function() {
         divMatrix.classList.add('divMatrix');
         
         _createMatrixName(matrix, divMatrix);
-        _createMatrixTable(length, divMatrix);
+        _createMatrixTable(length, divMatrix, matrix);
 
         //only for centering -style
         let extraDiv= document.createElement('div');
@@ -93,11 +93,11 @@ const DOM = (function() {
         })
     }
 
-    const _createMatrixTable = (length, container) => {
+    const _createMatrixTable = (length, container, matrix) => {
         let headSign='';
-        if(container== elements.container1) {
+        if(matrix== 'D') {
             headSign= 'L';
-        } else if(container== elements.container2) {
+        } else if(matrix== 'T') {
             headSign= 'W';
         }
 
