@@ -9,6 +9,9 @@ body {
 :root {
     --matrix-length-D: 0;
     --matrix-length-T: 0;
+
+    --divWidth: 80%;
+    --titleWidth: 50%;
 }
 
 /*removes input type=1  number increment/decrement buttons*/
@@ -24,6 +27,36 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+@media print {
+    :root {
+        --divWidth: 100%;
+        --titleWidth: 100%;
+    }
+
+    body {
+        font-size: 14px;
+        transform: scale(0.9);
+    }
+
+    .layoutTableCell * {
+        padding: 0px;
+    }
+}
+
+#aside {
+    width: var(--titleWidth);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#symetry {
+    /*only for symetry purposes*/
+    height: 50px;
+    width: 50px;
+}
 
 h1 {
     text-align: center;
@@ -32,6 +65,30 @@ h1 {
 
     font-size: 50px;
     font-weight: 800;
+}
+
+#print {
+    height: 45px;
+    width: 45px;
+
+    border: 3px solid black;
+    border-radius: 7px;
+
+    background: url('../images/printer.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 90%;
+}
+
+#print:hover {
+    border-color: black;
+
+    background: url('../images/printer-inverted.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 90%;
+
+    background-color: gray;
 }
 
 #disclaimer {
@@ -116,7 +173,7 @@ button, input {
     "matrix1 . matrix2"
     ". mid .";
 
-    width: 80%;
+    width: var(--divWidth);
 
     border: none;
 }
@@ -125,7 +182,7 @@ button, input {
     display: flex;
     flex-direction: column;
 
-    width: 80%;
+    width: var(--divWidth);
 
     border: none;
 }
@@ -209,7 +266,7 @@ button, input {
     margin-top: 30px;
     margin-bottom: 30px;
 
-    width: 80%;
+    width: var(--divWidth);
 
     border: 1px black solid;
     border-radius: 5px;

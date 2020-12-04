@@ -1,9 +1,19 @@
 /*
 TO DO:
--test bigger matrix values (time) + how they look
--bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
+-clear RESULTS
+-clear ALL
+-separate print sheet!
+-number of optimal combinations
+
+(-add Title)
+(-auto demo matrixes inputed)
+(-color fixed dept in best table)
+(-D symetry button)
 
 -remove demos from calculate costs
+-bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
+-test bigger matrix values (time) + how they look
+
 
 LEARNED:
 -learned how to make HTML table
