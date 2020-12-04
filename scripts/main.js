@@ -1,18 +1,14 @@
 /*
 TO DO:
-*beautify
 -get rid of CSS margins in px; use %
 -fix input styling
 
 (-figure out how to make names always a certain amount from the table --> stick table into a div elem??)
 
--test bigger matrix values + how they look
+-test bigger matrix values (time) + how they look
 -bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
 
-[DONE]add layout name to each div 
-+ what is getting fixed: 'Fix: W2'
-    [DONE]best div: 'Best layout: 3'
-    [DONE]OPTIMAL LAYOUT
+-turn Div2 into flex
 
 -remove demos from calculate costs
 
@@ -20,6 +16,7 @@ LEARNED:
 -learned how to make HTML table
 -learned how to make a matrix with it, and use input fields + then collect those inputs
 -special double iteration which goes diagonally
+-practiced module pattern
 
 */
 
@@ -239,7 +236,12 @@ const DOM = (function() {
                 table.appendChild(row);
             }
             table.classList.add('CT');
-        parent.appendChild(table);
+            //put it into a div
+            let div= document.createElement('div');
+            div.classList.add('tableCTDiv');
+            div.appendChild(table);
+
+        parent.appendChild(div);
     }
 
     const _createEquation= (layoutObject) => {
@@ -305,18 +307,39 @@ const DOM = (function() {
 
         if(/[0-9]+/.test(status)) {
             layoutName.textContent=`Layout: ${status}`;
+            layoutName.classList.add('layoutName');
 
             let layoutFix= document.createElement('p');
             layoutFix.textContent= `Fixing: ${bestOrFix}`;
             //div.appendChild(layoutFix);
+            div.appendChild(layoutName);
             
         } else if(status == 'best') {
             layoutName.textContent= `Best layout: ${bestOrFix}`;
+
+            layoutName.classList.add('layoutName');
+            layoutName.classList.add('layoutNameBest');
+
+            result.classList.add('resultBest');
+            resultCT.classList.add('resultBest');
+
+            div.appendChild(layoutName);
+
         } else if(status == 'optimal') {
             layoutName.textContent= 'OPTIMAL LAYOUT';
+            layoutName.classList.add('layoutName');
+            layoutName.classList.add('layoutNameBest');
+
+            result.classList.add('resultBest');
+            resultCT.classList.add('resultBest');
+
+            div.classList.add('optimalDiv');
+
+            div.appendChild(layoutName);
+
+            //let N= _getNumberOfLayouts();
         }
 
-        div.appendChild(layoutName);
         div.appendChild(table);
         div.appendChild(equation);
         div.appendChild(result);
@@ -324,6 +347,21 @@ const DOM = (function() {
         div.appendChild(resultCT);
 
         document.body.appendChild(div);
+    }
+
+    const _createCTDiv = (parent) => {
+        let ctDiv= document.createElement('div');
+        ctDiv.classList.add('ctDiv');
+
+        _createMatrixName('CT', ctDiv);
+        _createCTtable(ctDiv);
+
+        //only for style purposes --> it allows to center CT matrix
+        let extraDiv= document.createElement('div');
+        extraDiv.style.cssText= "height: 57px; width: 57px";
+        ctDiv.appendChild(extraDiv);
+
+        parent.appendChild(ctDiv);
     }
 
 
@@ -358,8 +396,9 @@ const DOM = (function() {
 
             //creates new div w/ CT matrix, fixInput & calcBtn
             let div= _createNewDiv();
-            _createMatrixName('CT', div);
-            _createCTtable(div);
+            //_createMatrixName('CT', div);
+            //_createCTtable(div);
+            _createCTDiv(div);
             _createFixInput(div);
             _createCalcBtn(div);
             document.body.appendChild(div);
