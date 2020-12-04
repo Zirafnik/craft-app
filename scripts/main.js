@@ -2,8 +2,6 @@
 TO DO:
 -get rid of CSS margins in px; use %
 
-(-figure out how to make names always a certain amount from the table --> stick table into a div elem??)
-
 -test bigger matrix values (time) + how they look
 -bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
 
@@ -49,10 +47,13 @@ const DOM = (function() {
         if(storage.getDlength()%1==0 && storage.getTlength()%1==0) {
             _cleanInputContainers();
 
-            _createMatrixName('D', elements.div1);
-            _createMatrixName('T', elements.div1);
-            _createMatrixTable(storage.getDlength(), elements.container1);
-            _createMatrixTable(storage.getTlength(), elements.container2);
+            //_createMatrixName('D', elements.div1);
+            //_createMatrixName('T', elements.div1);
+            //_createMatrixTable(storage.getDlength(), elements.container1);
+            //_createMatrixTable(storage.getTlength(), elements.container2);
+            _createMatrixDiv('D', elements.container1, storage.getDlength());
+            _createMatrixDiv('T', elements.container2, storage.getTlength());
+
             //removes start button
             elements.div1.removeChild(elements.start);
             //creates enter
@@ -69,6 +70,21 @@ const DOM = (function() {
         name.classList.add('names');
         name.setAttribute('id', 'name' + matrix);
         div.appendChild(name);
+    }
+
+    const _createMatrixDiv= (matrix, parent, length) => {
+        let divMatrix= document.createElement('div');
+        divMatrix.classList.add('divMatrix');
+        
+        _createMatrixName(matrix, divMatrix);
+        _createMatrixTable(length, divMatrix);
+
+        //only for centering -style
+        let extraDiv= document.createElement('div');
+        extraDiv.style.cssText= 'height: 57px; width: 57px;';
+        divMatrix.appendChild(extraDiv);
+
+        parent.appendChild(divMatrix);
     }
 
     const _cleanInputContainers= () => {
@@ -123,7 +139,12 @@ const DOM = (function() {
                         }
                 table.appendChild(row);
             }
-        container.appendChild(table);
+            //put it into a div
+            let div= document.createElement('div');
+            div.classList.add('tableCTDiv');
+            div.appendChild(table);
+
+        container.appendChild(div);
     }
 
     const _createFixInput = (parent) => {
