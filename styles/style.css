@@ -1,3 +1,11 @@
+body {
+    display:  flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}
+
 :root {
     --matrix-length-D: 0;
     --matrix-length-T: 0;
@@ -108,8 +116,7 @@ button, input {
     "matrix1 . matrix2"
     ". mid .";
 
-    margin-right: 250px;
-    margin-left: 250px;
+    width: 80%;
 
     border: none;
 }
@@ -118,8 +125,7 @@ button, input {
     display: flex;
     flex-direction: column;
 
-    margin-right: 300px;
-    margin-left: 300px;
+    width: 80%;
 
     border: none;
 }
@@ -203,8 +209,7 @@ button, input {
     margin-top: 30px;
     margin-bottom: 30px;
 
-    margin-left: 150px;
-    margin-right: 150px;
+    width: 80%;
 
     border: 1px black solid;
     border-radius: 5px;

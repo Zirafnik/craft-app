@@ -1,7 +1,5 @@
 /*
 TO DO:
--get rid of CSS margins in px; use %
-
 -test bigger matrix values (time) + how they look
 -bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
 
