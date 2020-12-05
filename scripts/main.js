@@ -2,8 +2,7 @@
 TO DO:
 -clear RESULTS
 -clear ALL
--separate print sheet!
--number of optimal combinations
+-separate print sheet! @media delete
 
 (-add Title)
 (-auto demo matrixes inputed)
@@ -18,7 +17,7 @@ TO DO:
 LEARNED:
 -learned how to make HTML table
 -learned how to make a matrix with it, and use input fields + then collect those inputs
--special double iteration which goes diagonally
+-figured out special double iteration which goes diagonally
 -practiced module pattern
 
 */
@@ -363,7 +362,7 @@ const DOM = (function() {
 
             div.appendChild(layoutName);
 
-            //let N= _getNumberOfLayouts();
+            div.appendChild(_printNumberOfCombos());
         }
 
         div.appendChild(table);
@@ -373,6 +372,15 @@ const DOM = (function() {
         div.appendChild(resultCT);
 
         document.body.appendChild(div);
+    }
+
+    const _printNumberOfCombos= () => {
+        let print= document.createElement('p');
+        let num= Logic.getNumberOfCombinations();
+        print.textContent= `Number of all combinations (N)= ${num}`;
+        print.classList.add('allCombos');
+
+        return print;
     }
 
     const _createCTDiv = (parent) => {
@@ -805,12 +813,24 @@ const Logic = (function() {
         return best;
     }
 
+    const _factorial = (n) => {
+        return (n != 1) ? n * _factorial(n - 1) : 1;
+    }
+
+    const getNumberOfCombinations= () => {
+        //if matrixes same length
+        if(storage.getTlength() == storage.getDlength()) {
+            return _factorial(storage.getDlength());
+        }
+    }
+
     return {
         createMatrixCT,
         getRemainingLayouts,
         getAllPermutations,
         calculateLayoutCost,
         calculateLayoutCostCT,
-        getBestLayout
+        getBestLayout,
+        getNumberOfCombinations
     }
 })();

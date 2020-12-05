@@ -360,3 +360,10 @@ button {
 .optimalDiv {
     background-color: rgb(255, 240, 212);
 }
+
+.allCombos {
+    margin-top: 12px;
+    margin-bottom: 12px;
+
+    font-size: 17px;
+}
