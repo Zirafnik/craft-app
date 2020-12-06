@@ -367,3 +367,20 @@ button {
 
     font-size: 17px;
 }
+
+.finalDiv {
+    width: var(--divWidth);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    margin-bottom: 50px;
+    margin-top: 40px;
+}
+
+.endBtns {
+    font-size: 28px;
+    padding: 5px;
+}

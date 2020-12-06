@@ -3,6 +3,10 @@ TO DO:
 -clear RESULTS
 -clear ALL
 -separate print sheet! @media delete
+-add footer
+-bugfix: if input dept too big (or too small)?  if not one of the available depts
+-add margin to input div, so calcBtn not sitting on bottom of page
+-make page scroll to end
 
 (-add Title)
 (-auto demo matrixes inputed)
@@ -375,12 +379,12 @@ const DOM = (function() {
     }
 
     const _printNumberOfCombos= () => {
-        let print= document.createElement('p');
+        let combos= document.createElement('p');
         let num= Logic.getNumberOfCombinations();
-        print.textContent= `Number of all combinations (N)= ${num}`;
-        print.classList.add('allCombos');
+        combos.textContent= `Number of all combinations (N)= ${num}`;
+        combos.classList.add('allCombos');
 
-        return print;
+        return combos;
     }
 
     const _createCTDiv = (parent) => {
@@ -396,6 +400,72 @@ const DOM = (function() {
         ctDiv.appendChild(extraDiv);
 
         parent.appendChild(ctDiv);
+    }
+
+    const _endButtonsDiv= () => {
+        let finalDiv= document.createElement('div');
+        finalDiv.classList.add('finalDiv');
+
+        let printBtn= document.createElement('button');
+        printBtn.textContent= 'PRINT';
+        printBtn.classList.add('endBtns');
+        printBtn.addEventListener('click', _printPage);
+
+        let clearResultsBtn= document.createElement('button');
+        clearResultsBtn.textContent= 'Clear RESULTS';
+        clearResultsBtn.classList.add('endBtns');
+        clearResultsBtn.addEventListener('click', _clearResults);
+
+        let clearAllBtn= document.createElement('button');
+        clearAllBtn.textContent= 'Clear ALL';
+        clearAllBtn.classList.add('endBtns');
+        clearAllBtn.addEventListener('click', function(){
+            location.reload();
+        });
+
+
+        finalDiv.appendChild(clearResultsBtn);
+        finalDiv.appendChild(printBtn);
+        finalDiv.appendChild(clearAllBtn);
+
+        return finalDiv;
+    }
+
+    const _clearResults= () => {
+        //clears DOM
+        while(document.querySelector('body').children.length>5) {
+            document.body.removeChild(document.body.lastChild)
+        }
+
+        //clears storage
+        //you cannot just reassing an empty array A=[] , if it is referenced elsewhere
+        //solution: https://stackoverflow.com/questions/1232040/how-do-i-empty-an-array-in-javascript
+        storage.matrixD.length= 0;
+        storage.matrixT.length= 0;
+        storage.matrixCT.length= 0;
+
+        //same problem with objects
+        //https://stackoverflow.com/questions/684575/how-to-quickly-clear-a-javascript-object
+        storage.emptyObject(storage.CRAFTlayouts);
+        storage.emptyObject(storage.CRAFTlayoutCosts);
+
+        storage.emptyObject(storage.OPTIMALlayouts);
+        storage.emptyObject(storage.OPTIMALlayoutCosts);
+
+        storage.currentBestLayout.length= 0;
+        storage.fixedDepts.length= 0;
+
+        storage.craftLayoutCounter= 0;
+        storage.craftLayoutCostCounter= 0;
+        storage.optimalLayoutCounter= 0;
+        storage.optimalLayoutCostCounter= 0;
+
+        //adds ENTER btn
+        _createEnterButton();
+    }
+
+    const _printPage= () => {
+        window.print();
     }
 
 
@@ -425,13 +495,15 @@ const DOM = (function() {
             */
 
             //saves both tables to multidimensional arrays
+
             storage.saveTable(elements.container1);
             storage.saveTable(elements.container2);
 
+
             //creates new div w/ CT matrix, fixInput & calcBtn
             let div= _createNewDiv();
-            //_createMatrixName('CT', div);
-            //_createCTtable(div);
+                //_createMatrixName('CT', div);
+                //_createCTtable(div);
             _createCTDiv(div);
             _createFixInput(div);
             _createCalcBtn(div);
@@ -514,6 +586,9 @@ const DOM = (function() {
                 let optimal= sortedArr[0][0];
 
                 _createNewLayout(storage.OPTIMALlayouts[optimal], storage.OPTIMALlayoutCosts[optimal], storage.OPTIMALlayoutCosts[optimal], 'optimal', 0);
+
+                //adds ending buttons
+                document.body.appendChild(_endButtonsDiv());
                 return;
             } else {
                 //create new input
@@ -526,6 +601,9 @@ const DOM = (function() {
         })
         parent.appendChild(calc);
     }
+
+    //PRINT BUTTON
+    document.getElementById('print').addEventListener('click', _printPage);
 
 
     const getAllContainerInputElements= (container) => {
@@ -573,14 +651,17 @@ const storage= (function() {
             arr.forEach(input => {
                 matrix.push(Number(input.value));
             });
+
         //turn array of numbers into array of arrays --> each array is 1 row, and each element in array is the column index
+        console.log(CRAFTlayouts);
+        console.log(CRAFTlayoutCosts);
         while(matrix.length) {
             if(container == DOM.elements.container1) {
                 matrixD.push(matrix.splice(0, getDlength()));
             } else if(container == DOM.elements.container2) {
                 matrixT.push(matrix.splice(0, getTlength()));
             }
-        }      
+        }
     }
 
 
@@ -621,6 +702,11 @@ const storage= (function() {
     let optimalLayoutCostCounter= 0;
 
 
+    const emptyObject = (object) => {
+        for (var member in object) delete object[member];
+    }
+
+
     let matrixDdemo= [
         [0, 6, 8, 2],
         [6, 0, 4, 10],
@@ -659,6 +745,7 @@ const storage= (function() {
         OPTIMALlayoutCosts,
         saveOptimalCost,
         optimalLayoutCounter,
+        emptyObject,
 
         matrixDdemo,
         matrixTdemo,
@@ -719,9 +806,6 @@ const Logic = (function() {
 
             //checks if layout equals to already best layout
             if(remLoc.length != bestLayoutArr.length && arr.every((value, index) => value === bestLayoutArr[index])) {
-                console.log('same value');
-                console.log(arr);
-                console.log(bestLayoutArr);
                 continue;
             } else {
                 //saves the layout
