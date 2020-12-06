@@ -1,7 +1,5 @@
 /*
 TO DO:
--clear RESULTS
--clear ALL
 -separate print sheet! @media delete
 -add footer
 -bugfix: if input dept too big (or too small)?  if not one of the available depts
@@ -527,7 +525,9 @@ const DOM = (function() {
             let cost= Logic.calculateLayoutCost(layout);
             let costCT= Logic.calculateLayoutCostCT(layout);
 
+            console.log(storage.craftLayoutCostCounter);
             storage.saveLayoutCost(cost);
+            console.log(storage.craftLayoutCostCounter);
 
             let fixing= getCurrentFixInput();
             _createNewLayout(layout, cost, costCT, i, fixing);
@@ -589,6 +589,9 @@ const DOM = (function() {
 
                 //adds ending buttons
                 document.body.appendChild(_endButtonsDiv());
+
+                //scrolls to bottom
+                window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
                 return;
             } else {
                 //create new input
@@ -598,6 +601,8 @@ const DOM = (function() {
 
                 document.body.appendChild(div);
             }
+            //scrolls to bottom
+            window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
         })
         parent.appendChild(calc);
     }
@@ -653,8 +658,6 @@ const storage= (function() {
             });
 
         //turn array of numbers into array of arrays --> each array is 1 row, and each element in array is the column index
-        console.log(CRAFTlayouts);
-        console.log(CRAFTlayoutCosts);
         while(matrix.length) {
             if(container == DOM.elements.container1) {
                 matrixD.push(matrix.splice(0, getDlength()));
@@ -674,8 +677,10 @@ const storage= (function() {
     };
 
     const saveLayoutCost= (cost) => {
-        craftLayoutCostCounter= craftLayoutCostCounter + 1;
-        CRAFTlayoutCosts[craftLayoutCostCounter]= cost;
+        //you have to call storage, otherwise it doesnt update the 'global' variable OR get a getter function
+        //https://stackoverflow.com/questions/53726729/why-value-of-x-in-iife-chage-based-on-the-way-we-access-it
+        storage.craftLayoutCostCounter++;
+        CRAFTlayoutCosts[storage.craftLayoutCostCounter]= cost;
     }
 
     let OPTIMALlayouts= {
@@ -687,8 +692,9 @@ const storage= (function() {
     }
 
     const saveOptimalCost= (cost) => {
-        optimalLayoutCostCounter= optimalLayoutCostCounter + 1;
-        OPTIMALlayoutCosts[optimalLayoutCostCounter]= cost;
+        //https://stackoverflow.com/questions/53726729/why-value-of-x-in-iife-chage-based-on-the-way-we-access-it
+        storage.optimalLayoutCostCounter++;
+        OPTIMALlayoutCosts[storage.optimalLayoutCostCounter]= cost;
     }
     
     let currentBestLayout=[/*gets initial values from creation of CT table*/];
@@ -741,10 +747,12 @@ const storage= (function() {
         currentBestLayout,
         fixedDepts,
         craftLayoutCounter,
+        craftLayoutCostCounter,
         OPTIMALlayouts,
         OPTIMALlayoutCosts,
         saveOptimalCost,
         optimalLayoutCounter,
+        optimalLayoutCostCounter,
         emptyObject,
 
         matrixDdemo,
