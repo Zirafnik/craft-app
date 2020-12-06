@@ -230,7 +230,6 @@ button, input {
     align-self: center;
     justify-self: center;
 
-    margin-top: 30px;
     margin-bottom: 20px;
 
     font-size: 18px;
@@ -252,6 +251,9 @@ button, input {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    margin-top: 0px;
+    margin-bottom: 40px;
 }
 
 .calcBtn {
@@ -267,8 +269,8 @@ button, input {
 }
 
 .divs {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 0px;
+    margin-bottom: 50px;
 
     width: var(--divWidth);
 
