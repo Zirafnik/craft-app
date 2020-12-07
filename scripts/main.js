@@ -2,11 +2,11 @@
 TO DO:
 -separate print sheet! @media delete
 
+(-make it work with asymetric matrixes)
 (-add Title)
 (-auto demo matrixes inputed)
 (-color fixed dept in best table)
 (-D symetry button)
-(-make copyright uniform)
 
 -remove demos from calculate costs
 -bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
@@ -432,7 +432,6 @@ const DOM = (function() {
         while(document.querySelector('body').children.length>5) {
             document.body.removeChild(document.body.lastChild)
         }
-        document.querySelector('#footer').style.setProperty('bottom', '0');
 
         //clears storage
         //you cannot just reassing an empty array A=[] , if it is referenced elsewhere
@@ -459,6 +458,9 @@ const DOM = (function() {
 
         //adds ENTER btn
         _createEnterButton();
+
+        //adds footer
+        document.body.appendChild(footer);
     }
 
     const _printPage= () => {
@@ -641,7 +643,7 @@ const DOM = (function() {
 
         return value;
     }
-    
+
 
     return {
         elements,
