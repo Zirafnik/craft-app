@@ -2,9 +2,6 @@
 TO DO:
 -separate print sheet! @media delete
 -add footer
--bugfix: if input dept too big (or too small)?  if not one of the available depts
--add margin to input div, so calcBtn not sitting on bottom of page
--make page scroll to end
 
 (-add Title)
 (-auto demo matrixes inputed)
@@ -551,11 +548,11 @@ const DOM = (function() {
                 return;
             }
 
-            let regex= /W[0-9]/;
-            if(regex.test(getCurrentFixInput())==false) {
+            if(storage.currentBestLayout.includes(getCurrentFixInput())==false) {
                 alert('Incorrect input! (example of allowed input: W3)');
                 return;
             }
+
 
             e.target.parentElement.removeChild(e.target);
             
