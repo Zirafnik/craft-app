@@ -1,12 +1,12 @@
 /*
 TO DO:
 -separate print sheet! @media delete
--add footer
 
 (-add Title)
 (-auto demo matrixes inputed)
 (-color fixed dept in best table)
 (-D symetry button)
+(-make copyright uniform)
 
 -remove demos from calculate costs
 -bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
@@ -18,6 +18,7 @@ LEARNED:
 -learned how to make a matrix with it, and use input fields + then collect those inputs
 -figured out special double iteration which goes diagonally
 -practiced module pattern
+-solved some obscure bugs
 
 */
 
@@ -464,6 +465,13 @@ const DOM = (function() {
         window.print();
     }
 
+    //FOOTER CREATION
+    let footer= document.createElement('footer');
+    footer.setAttribute('id', 'footer');
+    let small= document.createElement('small');
+    small.innerHTML= `&copy; Copyright 2020, David Habic. All Rights Reserved`;
+    footer.appendChild(small);
+
 
     //ENTER
     const _createEnterButton= () => {
@@ -471,7 +479,11 @@ const DOM = (function() {
         enter.textContent= 'ENTER';
         enter.setAttribute('id', 'enter');
 
+
         enter.addEventListener('click', function() {
+            //removes footer
+            document.body.removeChild(document.querySelector('#footer'));
+
             /*
             //checks if all inputs correct
             let regex= /[0-9]/;
@@ -498,19 +510,21 @@ const DOM = (function() {
 
             //creates new div w/ CT matrix, fixInput & calcBtn
             let div= _createNewDiv();
-                //_createMatrixName('CT', div);
-                //_createCTtable(div);
             _createCTDiv(div);
             _createFixInput(div);
             _createCalcBtn(div);
             document.body.appendChild(div);
-    
+
+        
             //removes ENTER button
             elements.div1.removeChild(enter);
 
+            //adds footer to end
+            document.body.appendChild(footer);
+
         })
 
-        elements.div1.appendChild(enter);
+        elements.div1.appendChild(enter);       
     }
 
     //CALCULATE
@@ -536,8 +550,6 @@ const DOM = (function() {
         let calc= document.createElement('button');
         calc.textContent= "CALCULATE";
         calc.classList.add('calcBtn');
-
-        _pushFooterToBottom();
 
         calc.addEventListener('click', function(e) {
             //remove calc btn
@@ -565,6 +577,7 @@ const DOM = (function() {
 
             _calculate();
 
+
             //print best layout
             let best= Logic.getBestLayout();
             _createNewLayout(storage.CRAFTlayouts[best], storage.CRAFTlayoutCosts[best], storage.CRAFTlayoutCosts[best], 'best', best);
@@ -591,10 +604,11 @@ const DOM = (function() {
                 document.body.appendChild(_endButtonsDiv());
 
                 //scrolls to bottom
-                window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+                window.scrollTo({left: 0, top: document.body.scrollHeight || document.documentElement.scrollHeight, behavior: 'smooth'});
 
-                //adds copyright
-                _pushFooterToBottom();
+                //adds footer
+                document.body.appendChild(footer);
+
                 return;
             } else {
                 //create new input
@@ -604,8 +618,9 @@ const DOM = (function() {
 
                 document.body.appendChild(div);
             }
-            //scrolls to bottom
-            window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+            //scrolls to bottom + adds footer
+            window.scrollTo({left: 0, top: document.body.scrollHeight || document.documentElement.scrollHeight, behavior: 'smooth'});
+            document.body.appendChild(footer);
         })
         parent.appendChild(calc);
     }
@@ -626,13 +641,7 @@ const DOM = (function() {
 
         return value;
     }
-
-    const _pushFooterToBottom= () => {
-        let height= document.body.scrollHeight;  
-        
-        document.querySelector('#footer').style.removeProperty('bottom');
-        document.documentElement.style.setProperty('--footerPos', `${height+300}px`);
-    }
+    
 
     return {
         elements,

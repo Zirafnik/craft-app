@@ -1,5 +1,5 @@
 html {
-    scroll-behavior: smooth;
+    /*scroll-behavior: smooth;*/
 }
 
 body {
@@ -393,9 +393,14 @@ button {
     padding: 5px;
 }
 
-#footer {
-    position: absolute;
-    margin-top: var(--footerPos);
+body {
+    min-height: 100%;
+}
+
+#footer {    
     width: 100%;
+
     text-align: center;
+
+    margin: 8px;
 }
