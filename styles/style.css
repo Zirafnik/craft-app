@@ -16,6 +16,8 @@ body {
 
     --divWidth: 80%;
     --titleWidth: 50%;
+
+    --footerPos: 0px;
 }
 
 /*removes input type=1  number increment/decrement buttons*/
@@ -389,4 +391,11 @@ button {
 .endBtns {
     font-size: 28px;
     padding: 5px;
+}
+
+#footer {
+    position: absolute;
+    margin-top: var(--footerPos);
+    width: 100%;
+    text-align: center;
 }

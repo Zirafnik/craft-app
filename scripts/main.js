@@ -431,6 +431,7 @@ const DOM = (function() {
         while(document.querySelector('body').children.length>5) {
             document.body.removeChild(document.body.lastChild)
         }
+        document.querySelector('#footer').style.setProperty('bottom', '0');
 
         //clears storage
         //you cannot just reassing an empty array A=[] , if it is referenced elsewhere
@@ -536,6 +537,8 @@ const DOM = (function() {
         calc.textContent= "CALCULATE";
         calc.classList.add('calcBtn');
 
+        _pushFooterToBottom();
+
         calc.addEventListener('click', function(e) {
             //remove calc btn
             if(getCurrentFixInput()=='') {
@@ -589,6 +592,9 @@ const DOM = (function() {
 
                 //scrolls to bottom
                 window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+
+                //adds copyright
+                _pushFooterToBottom();
                 return;
             } else {
                 //create new input
@@ -619,6 +625,13 @@ const DOM = (function() {
         let value= last.value;
 
         return value;
+    }
+
+    const _pushFooterToBottom= () => {
+        let height= document.body.scrollHeight;  
+        
+        document.querySelector('#footer').style.removeProperty('bottom');
+        document.documentElement.style.setProperty('--footerPos', `${height+300}px`);
     }
 
     return {
@@ -706,7 +719,7 @@ const storage= (function() {
 
 
     const emptyObject = (object) => {
-        for (var member in object) delete object[member];
+        for (let member in object) delete object[member];
     }
 
 
