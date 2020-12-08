@@ -8,9 +8,11 @@ TO DO:
 (-float point numbers)
 (-make print sheet better/prettier)
 
--remove demos from calculate costs
--bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
--test bigger matrix values (time) + how they look
+[DONE]remove demos from calculate costs
+-center input matrix + font-size
+[DONE]bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
+-test bigger matrix values (time) + how they look + print
+[DONE]bug with matrix6, test unnecessary combo (replaces W3 while it should be fixed)
 
 
 LEARNED:
@@ -540,9 +542,7 @@ const DOM = (function() {
             let cost= Logic.calculateLayoutCost(layout);
             let costCT= Logic.calculateLayoutCostCT(layout);
 
-            console.log(storage.craftLayoutCostCounter);
             storage.saveLayoutCost(cost);
-            console.log(storage.craftLayoutCostCounter);
 
             let fixing= getCurrentFixInput();
             _createNewLayout(layout, cost, costCT, i, fixing);
@@ -815,16 +815,19 @@ const Logic = (function() {
         let alreadyFixedIndexes= [];
         fixedDeptsArr.forEach(dept => alreadyFixedIndexes.push(bestLayoutArr.indexOf(dept)));
         
-        let indexes= [0, 1, 2, 3];
-        alreadyFixedIndexes.forEach(fixed => indexes.splice(fixed, 1));
+        let availableIndexes= [];
+        for(let i=0; i<bestLayoutArr.length; i++) {
+            if(alreadyFixedIndexes.includes(i)==false) {
+                availableIndexes.push(i);
+            }
+        }
 
-        return indexes;
+        return availableIndexes;
     }
 
     const getRemainingLayouts= (bestLayoutArr, fixDept) => {
         //remaining locations
         let remLoc= _getRemainingIndexes(storage.currentBestLayout, storage.fixedDepts);
-       
         let fixIndex= bestLayoutArr.indexOf(fixDept);
 
         let numCombos= remLoc.length;
@@ -883,11 +886,10 @@ const Logic = (function() {
     //remove DEMOS!!!!
     const calculateLayoutCost= (layoutObject) => {
         let sumCost= 0;
-
         let length= Object.keys(layoutObject).length;
         for(let i=0; i<length; i++) {
             for(let j=0; j<length; j++) {
-                sumCost=sumCost + storage.matrixTdemo[i][j] * storage.matrixDdemo[layoutObject[`W${i+1}`]][layoutObject[`W${j+1}`]];
+                sumCost=sumCost + storage.matrixT[i][j] * storage.matrixD[layoutObject[`W${i+1}`]][layoutObject[`W${j+1}`]];
             }
         }
         //storage.saveLayoutCost(sumCost);
@@ -902,7 +904,7 @@ const Logic = (function() {
         for(let i=0; i<length; i++) {
             j=i;
             for(j; j<length; j++) {
-                sumCost=sumCost + storage.matrixCTdemo[i][j] * storage.matrixDdemo[layoutObject[`W${i+1}`]][layoutObject[`W${j+1}`]];
+                sumCost=sumCost + storage.matrixCT[i][j] * storage.matrixD[layoutObject[`W${i+1}`]][layoutObject[`W${j+1}`]];
             }
         }
         return sumCost;
