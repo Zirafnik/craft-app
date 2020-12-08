@@ -1,12 +1,12 @@
 /*
 TO DO:
--separate print sheet! @media delete
-
 (-make it work with asymetric matrixes)
 (-add Title)
 (-auto demo matrixes inputed)
 (-color fixed dept in best table)
 (-D symetry button)
+(-float point numbers)
+(-make print sheet better/prettier)
 
 -remove demos from calculate costs
 -bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
@@ -19,6 +19,7 @@ LEARNED:
 -figured out special double iteration which goes diagonally
 -practiced module pattern
 -solved some obscure bugs
+-print sheet css
 
 */
 
