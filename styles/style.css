@@ -68,16 +68,22 @@ h1 {
 
 #print:hover {
     border-color: black;
-
+    
     background: url('../images/printer-inverted.png');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 90%;
-
+    
     background-color: orange;
 }
 
 #disclaimer {
+    text-align: center;
+}
+
+#tip {
+    margin-top: 8px;
+
     text-align: center;
 }
 
