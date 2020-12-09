@@ -3,13 +3,16 @@ body {
     flex-direction: column;
     
     align-items: center;
+    justify-content: center;
+
+    position: static;
 }
 
 :root {
     --matrix-length-D: 0;
     --matrix-length-T: 0;
 
-    --divWidth: 80%;
+    --divWidth: 100%;
     --titleWidth: 50%;
 
     --footerPos: 0px;
@@ -152,25 +155,22 @@ button, input {
 .divMatrix {
     display: flex;
     flex-direction: row;
-
-    transform: scale(0.6);
 }
 
 #div1 {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 7fr 2fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 7fr;
 
     grid-template-areas: 
-    "matrix1 . matrix2"
-    ". mid .";
-
-    width: 100%;
+    "matrix1 matrix2";
 
     border: none;
 
     margin: 0px;
     padding: 0px;
+
+    transform: scale(0.6);
 }
 
 #div2 {
