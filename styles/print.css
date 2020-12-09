@@ -71,17 +71,6 @@ h1 {
     background-size: 90%;
 }
 
-#print:hover {
-    border-color: black;
-
-    background: url('../images/printer-inverted.png');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 90%;
-
-    background-color: gray;
-}
-
 #disclaimer {
     text-align: center;
 }
