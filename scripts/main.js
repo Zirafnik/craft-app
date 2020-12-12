@@ -1,5 +1,5 @@
 /*
-TO DO:
+FUTURE DEVELOPMENT:
 (-make it work with asymetric matrixes)
 (-add Title)
 (-auto demo matrixes inputed)
@@ -9,18 +9,6 @@ TO DO:
 (-add calculation numbers to equations --> if 0 then not print combination)
 (-make numbers in equations smaller??)
 (-add 'Enter' keyboard event listener, for all buttons)
-
-[DONE]color fixed dept in best table
-[DONE]tip: use Tab
-[DONE]remove demos from calculate costs
-[DONE]center input matrix + font-size
-[DONE]bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
-[DONE]test bigger matrix values (time) + how they look + print [8 works fine, 9 almost breaks, 10 breaks]  
-ADD IF STATEMENT FOR OPTIMAL, where it breaks, + change check and alert
-[9 breaks printing --> offscreen]
-[DONE]bug with matrix6, test unnecessary combo (replaces W3 while it should be fixed)
-[DONE]add README
-
 
 LEARNED:
 -learned how to make HTML table
