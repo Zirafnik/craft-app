@@ -275,10 +275,6 @@ button, input {
     text-align: justify;
 }
 
-.inputContainer {
-    /* add same properties here from both containers below*/
-}
-
 #container1 {
     grid-area: matrix1;
     justify-self: center;
