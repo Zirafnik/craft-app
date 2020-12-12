@@ -6,18 +6,19 @@ TO DO:
 (-D symetry button)
 (-float point numbers)
 (-make print sheet better/prettier)
-(-add numbers to equations --> if 0 then not print)
+(-add numbers to equations --> if 0 then not print combination)
+(-make numbers in equations smaller??)
 
 [DONE]color fixed dept in best table
 [DONE]tip: use Tab
 [DONE]remove demos from calculate costs
 [DONE]center input matrix + font-size
 [DONE]bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
--test bigger matrix values (time) + how they look + print [7 works fine, 10 breaks, 15 breaks]  
+[DONE]test bigger matrix values (time) + how they look + print [8 works fine, 9 almost breaks, 10 breaks]  
 ADD IF STATEMENT FOR OPTIMAL, where it breaks, + change check and alert
 [9 breaks printing --> offscreen]
 [DONE]bug with matrix6, test unnecessary combo (replaces W3 while it should be fixed)
--add README
+[DONE]add README
 
 
 LEARNED:
@@ -53,9 +54,8 @@ const DOM = (function() {
         }
 
         //checks if lower than
-        if(storage.getDlength()>'90' || storage.getTlength()>'90') {
-            alert('You can only choose sizes between 1-7');
-            return;
+        if(storage.getDlength()>8 || storage.getTlength()>8) {
+            alert('For sizes above 8x8 it will NOT generate OPTIMAL solution!');
         }
 
         //check if matrix length values == whole numbers
@@ -606,21 +606,23 @@ const DOM = (function() {
 
             //checks if DONE --> last layout
             if(storage.fixedDepts.length == storage.currentBestLayout.length-1) {
-                //prints optimal div
-                Logic.getAllPermutations(storage.currentBestLayout);
+                //prints optimal div, IF matrix sizes <=8
+                if(storage.getDlength()<=8 && storage.getTlength()<=8) {
+                    Logic.getAllPermutations(storage.currentBestLayout);
 
-                let layoutsLength= Object.keys(storage.OPTIMALlayouts).length;
-                for(let i=1; i<=layoutsLength; i++) {
-                    let layout= storage.OPTIMALlayouts[i];
-                    let cost= Logic.calculateLayoutCost(layout);
+                    let layoutsLength= Object.keys(storage.OPTIMALlayouts).length;
+                    for(let i=1; i<=layoutsLength; i++) {
+                        let layout= storage.OPTIMALlayouts[i];
+                        let cost= Logic.calculateLayoutCost(layout);
 
-                    storage.saveOptimalCost(cost);
+                        storage.saveOptimalCost(cost);
+                    }
+
+                    let sortedArr = Object.entries(storage.OPTIMALlayoutCosts).sort(([,a],[,b]) => a-b);
+                    let optimal= sortedArr[0][0];
+
+                    _createNewLayout(storage.OPTIMALlayouts[optimal], storage.OPTIMALlayoutCosts[optimal], storage.OPTIMALlayoutCosts[optimal], 'optimal', 0);
                 }
-
-                let sortedArr = Object.entries(storage.OPTIMALlayoutCosts).sort(([,a],[,b]) => a-b);
-                let optimal= sortedArr[0][0];
-
-                _createNewLayout(storage.OPTIMALlayouts[optimal], storage.OPTIMALlayoutCosts[optimal], storage.OPTIMALlayoutCosts[optimal], 'optimal', 0);
 
                 //adds ending buttons
                 document.body.appendChild(_endButtonsDiv());
