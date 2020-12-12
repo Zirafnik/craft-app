@@ -387,6 +387,10 @@ body {
     min-height: 100%;
 }
 
+.fixedColor {
+    background-color: rgb(183, 255, 249);
+}
+
 #footer {    
     width: 100%;
 

@@ -3,16 +3,21 @@ TO DO:
 (-make it work with asymetric matrixes)
 (-add Title)
 (-auto demo matrixes inputed)
-(-color fixed dept in best table)
 (-D symetry button)
 (-float point numbers)
 (-make print sheet better/prettier)
+(-add numbers to equations --> if 0 then not print)
 
+[DONE]color fixed dept in best table
+[DONE]tip: use Tab
 [DONE]remove demos from calculate costs
--center input matrix + font-size
+[DONE]center input matrix + font-size
 [DONE]bug if size not exactly 4? --> maybe because costmatrix demos hardfixed??
--test bigger matrix values (time) + how they look + print
+-test bigger matrix values (time) + how they look + print [7 works fine, 10 breaks, 15 breaks]  
+ADD IF STATEMENT FOR OPTIMAL, where it breaks, + change check and alert
+[9 breaks printing --> offscreen]
 [DONE]bug with matrix6, test unnecessary combo (replaces W3 while it should be fixed)
+-add README
 
 
 LEARNED:
@@ -48,7 +53,7 @@ const DOM = (function() {
         }
 
         //checks if lower than
-        if(storage.getDlength()>'7' || storage.getTlength()>'7') {
+        if(storage.getDlength()>'90' || storage.getTlength()>'90') {
             alert('You can only choose sizes between 1-7');
             return;
         }
@@ -353,6 +358,8 @@ const DOM = (function() {
 
             div.appendChild(layoutName);
 
+            _colorFixed(table, Object.keys(layout), storage.fixedDepts);
+
         } else if(status == 'optimal') {
             layoutName.textContent= 'OPTIMAL LAYOUT';
             layoutName.classList.add('layoutName');
@@ -422,7 +429,6 @@ const DOM = (function() {
             location.reload();
         });
 
-
         finalDiv.appendChild(clearResultsBtn);
         finalDiv.appendChild(printBtn);
         finalDiv.appendChild(clearAllBtn);
@@ -468,6 +474,19 @@ const DOM = (function() {
 
     const _printPage= () => {
         window.print();
+    }
+
+    _colorFixed= (table, bestLayout, fixedDepts) => {
+        let fixedIndexes= [];
+        fixedDepts.forEach(dept => fixedIndexes.push(bestLayout.indexOf(dept)));
+
+        for(let i=0; i<fixedIndexes.length; i++) {
+            let cell1= table.querySelectorAll('tr')[0].querySelectorAll('td')[fixedIndexes[i]];
+            let cell2= table.querySelectorAll('tr')[1].querySelectorAll('td')[fixedIndexes[i]];
+
+            cell1.classList.add('fixedColor');
+            cell2.classList.add('fixedColor');
+        }
     }
 
     //FOOTER CREATION
