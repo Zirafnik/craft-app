@@ -274,10 +274,6 @@ button, input {
     text-align: justify;
 }
 
-.inputContainer {
-    /* add same properties here from both containers below*/
-}
-
 #container1 {
     grid-area: matrix1;
     justify-self: center;
@@ -310,6 +306,20 @@ th, td {
     margin: 4px;
 
     background-color: lightcyan;
+
+    text-align: center;
+
+    font-size: 16px;
+}
+
+#tip {
+    margin-top: 4px;
+
+    text-align: center;
+}
+
+.fixedColor {
+    background-color: rgb(183, 255, 249);
 }
 
 .matrix-headings {
