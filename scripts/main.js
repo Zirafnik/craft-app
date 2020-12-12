@@ -6,8 +6,9 @@ TO DO:
 (-D symetry button)
 (-float point numbers)
 (-make print sheet better/prettier)
-(-add numbers to equations --> if 0 then not print combination)
+(-add calculation numbers to equations --> if 0 then not print combination)
 (-make numbers in equations smaller??)
+(-add 'Enter' keyboard event listener, for all buttons)
 
 [DONE]color fixed dept in best table
 [DONE]tip: use Tab
@@ -62,10 +63,6 @@ const DOM = (function() {
         if(storage.getDlength()%1==0 && storage.getTlength()%1==0) {
             _cleanInputContainers();
 
-            //_createMatrixName('D', elements.div1);
-            //_createMatrixName('T', elements.div1);
-            //_createMatrixTable(storage.getDlength(), elements.container1);
-            //_createMatrixTable(storage.getTlength(), elements.container2);
             _createMatrixDiv('D', elements.container1, storage.getDlength());
             _createMatrixDiv('T', elements.container2, storage.getTlength());
 
@@ -505,12 +502,8 @@ const DOM = (function() {
 
 
         enter.addEventListener('click', function() {
-            //removes footer
-            document.body.removeChild(document.querySelector('#footer'));
-
-            /*
-            //checks if all inputs correct
-            let regex= /[0-9]/;
+            //checks if all matrix inputs correct
+            let regex= /[0-9]|^(?![\s\S])/; //numbers or empty string
             let mtx1= Array.from(getAllContainerInputElements(elements.container1));
             let mtx1Arr= [];
             mtx1.forEach(element => mtx1Arr.push(element.value));
@@ -519,17 +512,26 @@ const DOM = (function() {
             let mtx2Arr= [];
             mtx2.forEach(element => mtx2Arr.push(element.value));
 
-            if(mtx1Arr.includes('') || mtx1Arr.filter(input => regex.test(input)==false).length>0
-            || mtx2Arr.includes('') || mtx2Arr.filter(input => regex.test(input)==false).length>0) {
-                alert('Incorrect or empty inputs!');
+            if(mtx1Arr.filter(input => regex.test(input)==false).length>0
+            || mtx2Arr.filter(input => regex.test(input)==false).length>0) {
+                alert('Incorrect inputs! (ONLY NUMBERS ACCEPTABLE)');
                 return;
             }
-            */
+
+            //checks if D-matrix empty --> cannot be empty
+            if(mtx1Arr.includes('')) {
+                alert('Matrix D cannot have empty inputs!\nIf none provided, make it symmetrical.');
+                return;
+            }
+
 
             //saves both tables to multidimensional arrays
-
             storage.saveTable(elements.container1);
             storage.saveTable(elements.container2);
+
+
+            //removes footer
+            document.body.removeChild(document.querySelector('#footer'));
 
 
             //creates new div w/ CT matrix, fixInput & calcBtn
