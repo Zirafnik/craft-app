@@ -8,5 +8,6 @@ It is based on the exercises we have received and did in class, and therefore mi
 It takes 2 matrixes as inputs, and outputs not only the results, but also the calculation equations. It also outputs the optimal solution.
 It uses the minimal number of combinations.
 
+https://zirafnik.github.io/craft-app/
 
 Copyright 2020, David Habic. All Rights Reserved
