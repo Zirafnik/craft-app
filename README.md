@@ -32,13 +32,13 @@ Another thing to consider in the future would be making it fully responsive. Cur
 
 I also added several statements which act as form validation for inputs and catch the most common errors, and then pop up an alert. I did not yet know proper error handling and form validation techniques, but still implemented them as custom alerts. 
 
-If I were to rebuild this project today, I would most likely use React as there are many repeating elements, which I feel could cleanly be represented with React components.
+If I were to rebuild this project today, I would most likely use React as there are many repeating elements, which I feel could cleanly be implemented with React components.
 
 ## Instructions
 1. Choose matrix sizes
-2. Add numbers into matrixes (Use tab for faster switching between inputs)
-3. Choose the first department to fix
-4. Choose any consequent departments to fix
+2. Add numbers into matrixes (Use 'Tab' for faster switching between inputs)
+3. Choose the first workstation to fix
+4. Choose any consequent workstations to fix
 5. PRINT / Clear RESULTS / Clear ALL
 
 ## Features
@@ -50,7 +50,7 @@ If I were to rebuild this project today, I would most likely use React as there 
 - 'Clear ALL' button, which resets everything
 
 
-Live: https://zirafnik.github.io/craft-app/
+## Live: https://zirafnik.github.io/craft-app/
 
 ![Screenshot1](/screenshots/screenshot1.png)
 
@@ -60,4 +60,4 @@ Live: https://zirafnik.github.io/craft-app/
 
 
 
-Copyright 2020, David Habic. All Rights Reserved
+<p align="center">Copyright 2021, David Habic. All Rights Reserved</p>
