@@ -30,9 +30,13 @@
         </div>
 
         <footer id="footer">
-            <small>&copy; Copyright 2020, David Habic. All Rights Reserved</small>
+            <small id="copyright-year">&copy; Copyright 2020, David Habic. All Rights Reserved</small>
         </footer>
         
         <script src="scripts/main.js"></script>
+        <!-- Choose current copyright year -->
+        <script>
+            document.querySelector('#copyright-year').innerText = `\u00A9 Copyright ${new Date().getFullYear()}, David Habic. All Rights Reserved`;
+        </script>
     </body>
 </html>

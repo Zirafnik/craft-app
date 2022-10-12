@@ -64,4 +64,4 @@ There might also be some optimization opportunities with more efficient algorith
 
 
 
-<p align="center">Copyright 2021, David Habic. All Rights Reserved</p>
+<p align="center">Copyright 2022, David Habic. All Rights Reserved</p>
